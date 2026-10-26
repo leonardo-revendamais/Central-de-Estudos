@@ -1,0 +1,1378 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Central de Estudos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: barra lateral fixa no desktop + área de trabalho em cards brancos sobre lavanda; no celular, barra inferior de navegação */
+:root{
+  --pink:#FF69B4; --pink-ink:#C7337F; --pink-soft:#FFE3F1;
+  --lav:#E6E6FA; --lav-deep:#D4D2F2; --white:#FFFFFF;
+  --ink:#2D2438; --ink-2:#5E5470; --ink-3:#8E86A0;
+  --line:#ECEAF3; --field:#F6F5FA;
+  --ok:#2E9E6B; --ok-soft:#E1F4EA; --warn:#C98A12; --warn-soft:#FBF0D9; --bad:#D2455B; --bad-soft:#FBE3E7;
+  --shadow:0 1px 2px rgba(45,36,56,.06),0 6px 20px rgba(45,36,56,.06);
+  --f-display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --r:16px; --r-s:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --pink:#FF7DBF; --pink-ink:#FF9ACD; --pink-soft:#4A2440;
+  --lav:#1C1726; --lav-deep:#2A2338; --white:#26202F;
+  --ink:#F1ECF8; --ink-2:#C2B9D2; --ink-3:#8F86A0;
+  --line:#352D42; --field:#2E2739;
+  --ok:#5CC995; --ok-soft:#1E3A2E; --warn:#E5B04A; --warn-soft:#3D3120; --bad:#F07A8C; --bad-soft:#45222A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --pink:#FF7DBF; --pink-ink:#FF9ACD; --pink-soft:#4A2440;
+  --lav:#1C1726; --lav-deep:#2A2338; --white:#26202F;
+  --ink:#F1ECF8; --ink-2:#C2B9D2; --ink-3:#8F86A0;
+  --line:#352D42; --field:#2E2739;
+  --ok:#5CC995; --ok-soft:#1E3A2E; --warn:#E5B04A; --warn-soft:#3D3120; --bad:#F07A8C; --bad-soft:#45222A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--lav);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:1.75rem;font-weight:800}
+h2{font-size:1.15rem;font-weight:700}
+h3{font-size:1rem;font-weight:700}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--pink-ink)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+
+/* shell */
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100%}
+.side{position:sticky;top:0;height:100vh;padding:20px 14px;display:flex;flex-direction:column;gap:18px;border-right:1px solid var(--lav-deep);padding-left:max(14px,env(safe-area-inset-left,0px))}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--pink);display:grid;place-items:center;color:#fff}
+.brand b{font-family:var(--f-display);font-size:1.1rem;font-weight:800;line-height:1.1}
+.brand small{display:block;color:var(--ink-3);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:var(--ink-2);font-weight:500}
+.nav button:hover{background:var(--white)}
+.nav button[aria-current="page"]{background:var(--white);color:var(--ink);font-weight:700;box-shadow:var(--shadow)}
+.nav button[aria-current="page"] svg{color:var(--pink)}
+.nav svg{width:18px;height:18px;flex:none}
+.nav .count{margin-left:auto;font-size:.72rem;background:var(--pink);color:#fff;border-radius:99px;padding:0 7px;font-family:var(--f-mono)}
+.side-foot{margin-top:auto;font-size:.78rem;color:var(--ink-3);padding:0 8px;display:flex;flex-direction:column;gap:6px}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--lav);display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-block:14px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--lav-deep)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--lav)}
+.top .week-pill{display:flex;align-items:center;gap:8px;background:var(--white);border-radius:99px;padding:6px 14px;box-shadow:var(--shadow);font-weight:600;font-size:.9rem}
+.top .week-pill i{width:8px;height:8px;border-radius:50%;background:var(--pink);display:block}
+.top .overall{display:flex;align-items:center;gap:10px;flex:1;min-width:180px;max-width:360px}
+.top .overall .bar{flex:1}
+.top .overall span{font-size:.82rem;color:var(--ink-2);white-space:nowrap}
+.top .spacer{flex:1}
+.mob-brand{display:none}
+.content{padding-block:24px 60px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%}
+.foot{margin-top:auto;padding:16px 24px;font-size:.78rem;color:var(--ink-3);border-top:1px solid var(--lav-deep);display:flex;gap:8px;align-items:center}
+.foot i{width:6px;height:6px;border-radius:50%;background:var(--pink);display:block}
+
+.bottomnav{display:none}
+
+/* elements */
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);padding:20px}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.card-h p{color:var(--ink-3);font-size:.85rem}
+.page-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.page-h p{color:var(--ink-2);margin-top:4px;max-width:60ch}
+.eyebrow{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--pink-ink);font-weight:700}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.muted{color:var(--ink-3)}
+.small{font-size:.84rem}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:12px;border:1px solid transparent;cursor:pointer;font-weight:600;background:var(--field);color:var(--ink);transition:transform .12s,background .15s;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--line)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--pink);color:#fff}
+.btn.primary:hover{background:var(--pink-ink)}
+.btn.ghost{background:transparent;border-color:var(--line)}
+.btn.danger{background:var(--bad-soft);color:var(--bad)}
+.btn.sm{min-height:32px;padding:0 10px;font-size:.84rem;border-radius:9px}
+.btn svg{width:16px;height:16px}
+.icon-btn{all:unset;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:9px;color:var(--ink-2)}
+.icon-btn:hover{background:var(--field)}
+.icon-btn svg{width:17px;height:17px}
+
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--pink);border-radius:99px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--field);color:var(--ink-2);white-space:nowrap}
+.chip.pend{background:var(--field);color:var(--ink-2)}
+.chip.and{background:var(--warn-soft);color:var(--warn)}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+.chip.pink{background:var(--pink-soft);color:var(--pink-ink)}
+.chip i{width:6px;height:6px;border-radius:50%;background:currentColor;display:block}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--white);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi label{font-size:.75rem;color:var(--ink-3);font-weight:600;letter-spacing:.02em}
+.kpi b{font-family:var(--f-display);font-size:1.6rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi small{font-size:.78rem;color:var(--ink-2)}
+.kpi.lead{grid-column:span 2;background:var(--ink);color:var(--white)}
+.kpi.lead label{color:var(--lav-deep)}
+.kpi.lead b{font-size:2.4rem}
+.kpi.lead small{color:var(--lav-deep)}
+.kpi.lead .bar{background:rgba(255,255,255,.15);margin-top:6px}
+:root[data-theme="dark"] .kpi.lead{background:var(--pink-soft);color:var(--ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .kpi.lead{background:var(--pink-soft);color:var(--ink)}}
+
+/* Content rows + animated check */
+.subj{display:flex;flex-direction:column;gap:2px}
+.subj-h{display:flex;align-items:center;gap:8px;padding:12px 4px 6px;font-weight:700;font-size:.85rem;color:var(--ink-2);text-transform:uppercase;letter-spacing:.05em}
+.subj-h .dot{width:9px;height:9px;border-radius:3px;background:var(--pink)}
+.citem{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 10px;border-radius:12px;transition:background .2s}
+.citem:hover{background:var(--field)}
+.citem .ttl{font-weight:600;cursor:pointer;min-width:0}
+.citem .ttl:hover{color:var(--pink-ink)}
+.citem .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;font-size:.78rem;color:var(--ink-3);align-items:center}
+.citem .meta span{display:inline-flex;align-items:center;gap:4px}
+.citem .meta svg{width:13px;height:13px}
+.citem.done .ttl{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--pink);text-decoration-thickness:2px}
+.citem .right{display:flex;align-items:center;gap:6px}
+
+.check{all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;position:relative;flex:none}
+.check svg{width:30px;height:30px;overflow:visible}
+.check .ring{fill:none;stroke:var(--ink-3);stroke-width:2;transition:stroke .2s}
+.check .fill{fill:var(--pink);transform-origin:15px 15px;transform:scale(0);transition:transform .32s cubic-bezier(.3,1.5,.5,1)}
+.check .tick{fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:16;stroke-dashoffset:16;transition:stroke-dashoffset .28s ease .18s}
+.check:hover .ring{stroke:var(--pink)}
+.check.on .ring{stroke:var(--pink)}
+.check.on .fill{transform:scale(1)}
+.check.on .tick{stroke-dashoffset:0}
+.check.pop::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--pink);animation:ring .55s ease-out forwards}
+@keyframes ring{from{opacity:.8;transform:scale(.6)}to{opacity:0;transform:scale(1.35)}}
+.check.no-anim .fill,.check.no-anim .tick{transition:none}
+@media (prefers-reduced-motion:reduce){.check .fill,.check .tick,.bar>i{transition:none}.check.pop::after{animation:none}}
+
+/* week tabs */
+.seg{display:inline-flex;background:var(--field);border-radius:10px;padding:3px;gap:2px}
+.seg button{all:unset;cursor:pointer;padding:5px 10px;border-radius:8px;font-size:.8rem;font-weight:600;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--white);color:var(--ink);box-shadow:var(--shadow)}
+.wtabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:thin}
+.wtab{all:unset;cursor:pointer;flex:none;background:var(--white);border-radius:12px;padding:8px 14px;min-width:110px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);border:2px solid transparent}
+.wtab b{font-size:.88rem}
+.wtab small{font-size:.72rem;color:var(--ink-3)}
+.wtab .bar{height:4px}
+.wtab[aria-selected="true"]{border-color:var(--pink)}
+.wtab.now b::after{content:" · atual";color:var(--pink-ink);font-weight:600}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;margin:0 -4px}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:700;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.n,th.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+
+/* forms */
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+.form .full{grid-column:1/-1}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld > span{font-size:.78rem;font-weight:600;color:var(--ink-2)}
+.fld input,.fld select,.fld textarea,.inp{width:100%;min-height:42px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--field);outline:none;transition:border .15s,background .15s}
+.fld textarea{min-height:76px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus,.inp:focus{border-color:var(--pink);background:var(--white)}
+.fld .hint{font-size:.75rem;color:var(--ink-3)}
+.fld .err{font-size:.75rem;color:var(--bad)}
+.toggle{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:500}
+.toggle input{appearance:none;width:38px;height:22px;border-radius:99px;background:var(--line);position:relative;cursor:pointer;transition:background .2s;flex:none}
+.toggle input::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.toggle input:checked{background:var(--pink)}
+.toggle input:checked::after{transform:translateX(16px)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters select,.filters input{min-height:38px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--white);font-size:.88rem;max-width:100%}
+
+/* drawer & modal */
+.scrim{position:fixed;inset:0;background:rgba(45,36,56,.35);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--white);z-index:41;transform:translateX(102%);transition:transform .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(45,36,56,.15);padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px)}
+.drawer.on{transform:none}
+.drawer-h{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.drawer-h h2{flex:1;min-width:0}
+.drawer-b{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:20px}
+.drawer-f{padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.sect{display:flex;flex-direction:column;gap:10px}
+.sect > h3{display:flex;align-items:center;gap:8px;font-size:.92rem}
+.sect > h3 svg{width:16px;height:16px;color:var(--pink)}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%);width:min(420px,calc(100% - 32px));background:var(--white);border-radius:var(--r);z-index:51;padding:22px;box-shadow:0 20px 60px rgba(45,36,56,.3);opacity:0;pointer-events:none;transition:all .2s;display:flex;flex-direction:column;gap:14px}
+.modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+.mscrim{z-index:50}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--white);padding:10px 18px;border-radius:12px;z-index:60;opacity:0;transition:all .25s;font-weight:500;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.mat{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px}
+.mat .ico{width:34px;height:34px;border-radius:9px;background:var(--pink-soft);color:var(--pink-ink);display:grid;place-items:center;flex:none;font-size:.62rem;font-weight:800;font-family:var(--f-mono)}
+.mat .info{flex:1;min-width:0}
+.mat .info b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.9rem}
+.mat .info small{color:var(--ink-3);font-size:.75rem}
+
+.empty{text-align:center;padding:36px 20px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.empty .art{width:64px;height:64px;border-radius:20px;background:var(--pink-soft);color:var(--pink);display:grid;place-items:center}
+.empty .art svg{width:30px;height:30px}
+.empty p{color:var(--ink-2);max-width:46ch}
+
+.banner{display:flex;gap:12px;align-items:center;padding:12px 16px;border-radius:12px;background:var(--pink-soft);color:var(--ink);font-size:.88rem;flex-wrap:wrap}
+.banner b{color:var(--pink-ink)}
+.banner .row{margin-left:auto}
+
+.list{display:flex;flex-direction:column;gap:10px}
+.li{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--white)}
+.li .body{flex:1;min-width:0}
+.li .body b{display:block}
+.li .body p{font-size:.84rem;color:var(--ink-2);margin-top:2px}
+.stripe{width:4px;align-self:stretch;border-radius:4px;background:var(--line);flex:none}
+.stripe.bad{background:var(--bad)} .stripe.warn{background:var(--warn)} .stripe.ok{background:var(--ok)} .stripe.pink{background:var(--pink)}
+
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.chart .gl{stroke:var(--line);stroke-width:1}
+.hb{display:grid;grid-template-columns:minmax(90px,160px) 1fr 54px;gap:10px;align-items:center;font-size:.85rem;padding:5px 0}
+.hb .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb .bar{height:10px}
+.hb .v{text-align:right;font-family:var(--f-mono);font-size:.8rem}
+
+.summary-hero{background:var(--ink);color:var(--white);border-radius:var(--r);padding:22px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.summary-hero div{display:flex;flex-direction:column;gap:2px}
+.summary-hero label{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--lav-deep)}
+.summary-hero b{font-family:var(--f-display);font-size:1.8rem;font-weight:800}
+:root[data-theme="dark"] .summary-hero{background:var(--pink-soft);color:var(--ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .summary-hero{background:var(--pink-soft);color:var(--ink)}}
+
+.sheet{position:fixed;left:0;right:0;bottom:0;background:var(--white);z-index:41;border-radius:20px 20px 0 0;padding:16px max(16px,env(safe-area-inset-left,0px)) calc(16px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .25s}
+.sheet.on{transform:none}
+.sheet .nav{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+
+@media (max-width:1020px){.g3{grid-template-columns:1fr 1fr}}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  .mob-brand{display:flex}
+  .top{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:10px}
+  .top .overall{order:5;max-width:none;flex-basis:100%}
+  .top .hide-m{display:none}
+  .content{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 100px}
+  .foot{display:none}
+  .g2,.g3{grid-template-columns:1fr}
+  .form{grid-template-columns:1fr}
+  .kpi.lead{grid-column:1/-1}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .summary-hero{grid-template-columns:1fr 1fr}
+  .bottomnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--white);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px))}
+  .bottomnav button{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.68rem;font-weight:600;color:var(--ink-3);padding:6px 0;border-radius:10px}
+  .bottomnav button svg{width:20px;height:20px}
+  .bottomnav button[aria-current="page"]{color:var(--pink-ink)}
+  .citem{grid-template-columns:auto 1fr;}
+  .citem .right{grid-column:2}
+  .hb{grid-template-columns:minmax(70px,110px) 1fr 48px}
+}
+</style>
+
+<div class="app">
+  <aside class="side" aria-label="Menu">
+    <div class="brand">
+      <div class="brand-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v15H6.5A2.5 2.5 0 0 0 4 20.5 2.5 2.5 0 0 0 6.5 23H18"/><path d="m9 9 2 2 4-4"/></svg></div>
+      <div><b>Central de Estudos</b><small>Concurso público</small></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot" id="sideFoot"></div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <div class="brand mob-brand"><div class="brand-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div><b>Central de Estudos</b></div>
+      <div class="week-pill" id="weekPill"><i></i><span>Sem semana ativa</span></div>
+      <div class="overall"><div class="bar"><i id="ovBar" style="width:0"></i></div><span id="ovTxt">0% do plano</span></div>
+      <div class="spacer hide-m"></div>
+      <button class="btn ghost sm hide-m" id="goCrono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Cronograma</button>
+    </header>
+    <main class="content" id="view" tabindex="-1"></main>
+    <footer class="foot"><i></i><span id="footTxt">Carregando seus dados…</span></footer>
+  </div>
+</div>
+
+<nav class="bottomnav" id="bnav" aria-label="Navegação rápida"></nav>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-modal="true" role="dialog">
+  <div class="drawer-h"><h2 id="dTitle"></h2><button class="icon-btn" id="dClose" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-b" id="dBody"></div>
+  <div class="drawer-f" id="dFoot"></div>
+</aside>
+<div class="sheet" id="sheet"><nav class="nav" id="sheetNav"></nav></div>
+<div class="scrim mscrim" id="mscrim"></div>
+<div class="modal" id="modal" role="alertdialog"></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileIn" hidden>
+<input type="file" id="xlsIn" accept=".xlsx,.xls,.csv" hidden>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* Plano extraído da planilha Planejamento_de_estudos.xlsx (fonte da importação; a planilha original não é alterada) */
+const PLANO = {"titulo": "PLANEJAMENTO DE ESTUDOS — PREFEITURA DE CURITIBA", "periodo": "22/10/2026 a 11/12/2026", "carga": "8 horas líquidas, de segunda a sexta-feira", "distribuicao": "4h Conhecimentos Específicos | 2h Legislação | 1h matéria básica | 1h questões e revisão", "observacao": "O cronograma organiza os tópicos fornecidos. Confira o edital e as retificações para garantir que todos os dispositivos legais estejam cobertos.", "links": [{"nome": "Qconcursos — questões de concursos", "url": "https://www.qconcursos.com/questoes-de-concursos"}, {"nome": "TEC Concursos — banco de questões", "url": "https://www.tecconcursos.com.br/"}, {"nome": "Planalto — legislação federal", "url": "https://www.planalto.gov.br/ccivil_03/"}, {"nome": "Legislação municipal de Curitiba", "url": "https://legisladocexterno.curitiba.pr.gov.br/"}, {"nome": "Prefeitura de Curitiba — portal oficial", "url": "https://www.curitiba.pr.gov.br/"}], "semanas": [{"nome": "Semana 1", "titulo": "CRONOGRAMA DE ESTUDOS | SEMANA 1 - 22 A 23 OUT", "dias": [{"data": "2026-10-22", "dia": "Quinta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Fundamentos da Administração Pública: conceitos, princípios, organização, planejamento, organização, direção e controle.", "planejadoMin": 240, "status": null}, {"disciplina": "Legislação", "assunto": "Constituição Federal: arts. 1º ao 4º — princípios fundamentais.", "planejadoMin": 120, "status": null}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: quatro operações, estimativas e arredondamentos.", "planejadoMin": 60, "status": null}, {"disciplina": "Questões / revisão", "assunto": "Questões de Administração Pública e revisão dos artigos estudados.", "planejadoMin": 60, "status": null}], "sessao": {"inicio": "12:53", "fim": "17:00"}}, {"data": "2026-10-23", "dia": "Sexta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Processos administrativos, organização do ambiente de trabalho e gestão de pessoas.", "planejadoMin": 240, "status": null}, {"disciplina": "Legislação", "assunto": "Lei Orgânica de Curitiba: organização político-administrativa do município.", "planejadoMin": 120, "status": null}, {"disciplina": "Matéria básica", "assunto": "Informática: conceitos, hardware e software.", "planejadoMin": 60, "status": null}, {"disciplina": "Questões / revisão", "assunto": "Questões de Administração Pública e revisão da Lei Orgânica.", "planejadoMin": 60, "status": null}]}], "materiais": [{"data": "2026-10-22", "coluna": "Anotações/Resumo", "texto": "file:///C:/Users/Admin/Downloads/Revis%C3%A3o%20de%20Administra%C3%A7%C3%A3o%20P%C3%BAblica.html", "url": "file:///C:/Users/Admin/Downloads/Revis%C3%A3o%20de%20Administra%C3%A7%C3%A3o%20P%C3%BAblica.html"}, {"data": "2026-10-22", "coluna": "Apoio", "texto": "DOC", "url": "https://docs.google.com/document/d/1Ne2UbcVukjKY9g6XWytImj5D2yviwlwZin2Hg7SB_1w/edit?tab=t.0"}, {"data": null, "coluna": "Caderno de apoio da semana", "texto": "https://docs.google.com/document/d/1JI7vNpEEAoR0EceayRS4R_1vUYIwHYpbIUhmhc_vhfg/edit?tab=t.0", "url": "https://docs.google.com/document/d/1JI7vNpEEAoR0EceayRS4R_1vUYIwHYpbIUhmhc_vhfg/edit?tab=t.0"}], "inicio": "2026-10-22", "fim": "2026-10-23", "metaHoras": 16}, {"nome": "Semana 2", "titulo": "CRONOGRAMA DE ESTUDOS | SEMANA 2 - 26 A 30 OUT", "dias": [{"data": "2026-10-26", "dia": "Segunda-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Orçamento público; atos administrativos: conceitos, requisitos e atributos.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Lei Municipal nº 1.656/1958: estrutura e disposições iniciais do Estatuto.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: interpretação de texto, compreensão global e inferências.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões sobre orçamento e atos administrativos.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-10-27", "dia": "Terça-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Atos administrativos: classificação, espécies, anulação, revogação e convalidação.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Constituição Federal: arts. 5º ao 17 — direitos e garantias fundamentais.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: razão, proporção e regra de três simples.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões sobre atos administrativos e direitos fundamentais.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-10-28", "dia": "Quarta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Bens públicos e serviços públicos.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Lei Municipal nº 7.671/1991: organização administrativa do Poder Executivo de Curitiba.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: atalhos de teclado e gerenciamento de arquivos.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões sobre bens, serviços e organização municipal.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-10-29", "dia": "Quinta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Lei nº 14.133/2021: princípios, objetivos, agentes públicos e fases das licitações.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Leis nº 8.429/1992 e nº 14.230/2021: improbidade administrativa, conceitos e alterações importantes.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: classes de palavras e semântica.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de licitações e improbidade administrativa.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-10-30", "dia": "Sexta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Lei nº 14.133/2021: modalidades, contratação direta, dispensa e inexigibilidade.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Constituição Federal: arts. 18, 19, 29 e 30, conforme o edital.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: porcentagem e juros simples.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Revisão semanal e bateria de questões dos conteúdos estudados.", "planejadoMin": 60, "status": "Pendente"}]}], "materiais": [], "inicio": "2026-10-26", "fim": "2026-10-30", "metaHoras": 40}, {"nome": "Semana 3", "titulo": "CRONOGRAMA DE ESTUDOS | SEMANA 3 - 2 A 6 NOV", "dias": [{"data": "2026-11-02", "dia": "Segunda-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Lei nº 14.133/2021: contratos administrativos, formalização, execução, alterações e extinção.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Lei nº 12.527/2011: Lei de Acesso à Informação.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: Windows 10 e 11 e Linux Ubuntu.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de licitações e acesso à informação.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-03", "dia": "Terça-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Lei Municipal nº 16.466/2024: processo administrativo no Município de Curitiba.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Lei nº 10.048/2000: prioridade de atendimento às pessoas.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: coesão, coerência e gêneros textuais.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões sobre processo administrativo e prioridade de atendimento.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-04", "dia": "Quarta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Lei Municipal nº 1.656/1958: processo administrativo disciplinar.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Lei nº 8.069/1990 (ECA): disposições preliminares e direitos fundamentais.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: média, moda, mediana, tabelas e gráficos.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões sobre processo disciplinar e ECA.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-05", "dia": "Quinta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Responsabilidade dos agentes públicos e improbidade administrativa; relação entre Constituição e legislação infraconstitucional.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "LINDB — Decreto-Lei nº 4.657/1942, arts. 20 ao 30.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: Word 2016.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões sobre responsabilidade dos agentes e LINDB.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-06", "dia": "Sexta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Direito Constitucional: princípios fundamentais, direitos e garantias fundamentais.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "LGPD — Lei nº 13.709/2018, Capítulo IV.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: áreas, comprimento da circunferência e Teorema de Tales.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Revisão semanal de legislação e questões de Direito Constitucional.", "planejadoMin": 60, "status": "Pendente"}]}], "materiais": [], "inicio": "2026-11-02", "fim": "2026-11-06", "metaHoras": 40}, {"nome": "Semana 4", "titulo": "CRONOGRAMA DE ESTUDOS | SEMANA 4 - 9 A 13 NOV", "dias": [{"data": "2026-11-09", "dia": "Segunda-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Poder constituinte, normas constitucionais, hierarquia das normas e interpretação constitucional.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Lei Orgânica de Curitiba: segunda leitura e revisão dos pontos já estudados.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: Excel 2016.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de Direito Constitucional.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-10", "dia": "Terça-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Administração Pública na Constituição Federal: princípios, regras e agentes públicos.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Lei nº 1.656/1958: revisão do Estatuto e pontos relevantes para servidores municipais.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: concordância nominal e verbal.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de Administração Pública constitucional.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-11", "dia": "Quarta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Ética, integridade, transparência, conflitos de interesses e relações interpessoais.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Lei nº 13.460/2017: direitos dos usuários dos serviços públicos.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: sequências numéricas, figuras, letras e orientação.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de ética e atendimento no serviço público.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-12", "dia": "Quinta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Comunicação no serviço público e Lei nº 13.460/2017: aplicação prática.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Constituição Federal: arts. 37 ao 41, com foco na Administração Pública e servidores.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: navegadores, pesquisa na Web e Google Drive.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de comunicação, atendimento e Constituição.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-13", "dia": "Sexta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Sistemas de informação organizacional e Arquivologia: conceitos, princípios e gestão documental.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Lei nº 8.159/1991: política nacional de arquivos públicos e privados.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: pontuação e uso dos porquês.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de Arquivologia e revisão geral da semana.", "planejadoMin": 60, "status": "Pendente"}]}], "materiais": [], "inicio": "2026-11-09", "fim": "2026-11-13", "metaHoras": 40}, {"nome": "Semana 5", "titulo": "CRONOGRAMA DE ESTUDOS | SEMANA 5 - 16 A 20 NOV", "dias": [{"data": "2026-11-16", "dia": "Segunda-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Arquivologia: classificação, organização, ciclo documental, conservação e gestão de documentos.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisão da Lei nº 8.159/1991 e da LINDB.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: Outlook, Gmail e Webmail Zimbra.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de Arquivologia.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-17", "dia": "Terça-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Correspondência comercial e redação oficial: características, linguagem, estrutura e documentos oficiais.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisão da LGPD, Capítulo IV, e da Lei nº 12.527/2011.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: probabilidade, espaço amostral e eventos.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de redação oficial, LGPD e acesso à informação.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-18", "dia": "Quarta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisão de Fundamentos da Administração Pública, processos administrativos, gestão de pessoas e orçamento público.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisão da Lei Orgânica e da Lei nº 7.671/1991.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: segurança de dados e armazenamento em nuvem.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões dos conteúdos revisados.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-19", "dia": "Quinta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisão de Direito Administrativo: atos, bens, serviços públicos e Lei nº 14.133/2021.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisão da Lei nº 1.656/1958, incluindo processo administrativo disciplinar.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: ortografia, acentuação, fonemas e dígrafos.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de Direito Administrativo e legislação municipal.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-20", "dia": "Sexta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisão de Direito Constitucional, ética, atendimento, comunicação e arquivologia.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisão da Constituição Federal nos artigos previstos no edital.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: eventos dependentes, independentes, união e interseção.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Simulado parcial e correção detalhada.", "planejadoMin": 60, "status": "Pendente"}]}], "materiais": [], "inicio": "2026-11-16", "fim": "2026-11-20", "metaHoras": 40}, {"nome": "Semana 6", "titulo": "CRONOGRAMA DE ESTUDOS | SEMANA 6 - 23 A 27 NOV", "dias": [{"data": "2026-11-23", "dia": "Segunda-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Questões de Fundamentos da Administração Pública e processos administrativos.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Questões da Constituição Federal e da Lei Orgânica de Curitiba.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: inteligência artificial, ChatGPT, Copilot e Gemini.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Corrigir erros e atualizar o caderno de revisão.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-24", "dia": "Terça-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Questões de atos administrativos, bens públicos, serviços públicos e Lei nº 14.133/2021.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Questões sobre Estatuto dos Funcionários Públicos e organização administrativa municipal.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: grandezas proporcionais e regra de três composta.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Revisar os erros mais frequentes em Direito Administrativo.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-25", "dia": "Quarta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Questões de Direito Constitucional e responsabilidade dos agentes públicos.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Questões sobre improbidade administrativa e Lei nº 14.230/2021.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: funções sintáticas e revisão de concordância.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Corrigir questões e rever os dispositivos legais envolvidos.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-26", "dia": "Quinta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Questões de ética, atendimento, comunicação, gestão da informação e arquivologia.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Questões sobre Lei nº 13.460/2017, LAI, LGPD, ECA e prioridade de atendimento.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: revisão geral de Word, Excel, sistemas operacionais e e-mails.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Caderno de erros e revisão dos temas com menor aproveitamento.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-11-27", "dia": "Sexta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Simulado de Conhecimentos Específicos, seguido de correção.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Simulado de Legislação, seguido de correção.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: revisão de fórmulas e resolução de problemas.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Registrar os três assuntos mais difíceis da semana e planejar a recuperação.", "planejadoMin": 60, "status": "Pendente"}]}], "materiais": [], "inicio": "2026-11-23", "fim": "2026-11-27", "metaHoras": 40}, {"nome": "Semana 7", "titulo": "CRONOGRAMA DE ESTUDOS | SEMANA 7 - 30 NOV A 4 DEZ", "dias": [{"data": "2026-11-30", "dia": "Segunda-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisão intensiva de Administração Pública, planejamento, processos administrativos, gestão de pessoas e orçamento.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisão da Lei Orgânica, Lei nº 7.671/1991 e Estatuto dos Funcionários Públicos.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: interpretação, semântica e coesão textual.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões mistas e análise dos erros.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-12-01", "dia": "Terça-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisão intensiva de Direito Administrativo, com ênfase em licitações, contratos e processos administrativos.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisão da Lei nº 14.133/2021 e da Lei Municipal nº 16.466/2024.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: porcentagem, juros, razão e proporção.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de legislação administrativa.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-12-02", "dia": "Quarta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisão de Direito Constitucional, ética e atendimento ao usuário.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisão da Constituição Federal e da Lei nº 13.460/2017.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: revisão geral de hardware, software, Windows, Linux e segurança.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões mistas de Constitucional e atendimento.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-12-03", "dia": "Quinta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisão de Arquivologia, sistemas de informação, correspondência comercial e redação oficial.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisão de improbidade, LAI, ECA, LINDB e LGPD.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: probabilidade, estatística e interpretação de gráficos.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões dos conteúdos de menor domínio.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-12-04", "dia": "Sexta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Simulado de Conhecimentos Específicos com 20 questões, seguido de correção.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Simulado de Legislação com 5 questões e revisão dos dispositivos legais.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Informática: questões variadas de todo o edital.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Analisar desempenho, tempo por questão e erros recorrentes.", "planejadoMin": 60, "status": "Pendente"}]}], "materiais": [], "inicio": "2026-11-30", "fim": "2026-12-04", "metaHoras": 40}, {"nome": "Semana 8", "titulo": "CRONOGRAMA DE ESTUDOS | SEMANA 8 - 7 A 11 DEZ", "dias": [{"data": "2026-12-07", "dia": "Segunda-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Resolver 20 questões de Conhecimentos Específicos e corrigir os erros.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Resolver 5 questões de Legislação e revisar os dispositivos cobrados.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: 5 questões, priorizando interpretação e gramática.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Analisar os erros do dia e registrar conteúdos que exigem reforço.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-12-08", "dia": "Terça-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisar os assuntos com pior desempenho nos simulados.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisar os artigos e as leis que você mais errou.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Raciocínio Lógico: questões de matemática financeira, proporção, probabilidade e estatística.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Informática: questões variadas de todo o edital e revisão dos erros.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-12-09", "dia": "Quarta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisar Lei nº 14.133/2021, atos administrativos, processo administrativo, responsabilidade dos agentes públicos e Direito Constitucional.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisar Lei Orgânica, Estatuto dos Funcionários Públicos, Lei nº 7.671/1991 e Lei nº 16.466/2024.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Português: revisão rápida de concordância, pontuação, classes de palavras e porquês.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Questões de legislação e revisão do caderno de erros.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-12-10", "dia": "Quinta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Resolver questões de Conhecimentos Específicos de todas as áreas do edital.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Resolver questões de todas as leis previstas no conteúdo programático.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Questões mistas de Português, Raciocínio Lógico e Informática.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Corrigir o simulado e revisar os erros mais relevantes.", "planejadoMin": 60, "status": "Pendente"}]}, {"data": "2026-12-11", "dia": "Sexta-feira", "itens": [{"disciplina": "Conhecimentos Específicos", "assunto": "Revisar resumos, conceitos, classificações e diferenças entre institutos jurídicos.", "planejadoMin": 240, "status": "Pendente"}, {"disciplina": "Legislação", "assunto": "Revisar artigos importantes, competências, exceções e pontos que costuma confundir.", "planejadoMin": 120, "status": "Pendente"}, {"disciplina": "Matéria básica", "assunto": "Revisão leve de fórmulas de Raciocínio Lógico e conceitos de Informática.", "planejadoMin": 60, "status": "Pendente"}, {"disciplina": "Questões / revisão", "assunto": "Leitura do caderno de erros e encerramento dos estudos.", "planejadoMin": 60, "status": "Pendente"}]}], "materiais": [], "inicio": "2026-12-07", "fim": "2026-12-11", "metaHoras": 40}]};
+</script>
+<script>
+/* ================= utilidades ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = p => p + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const pad = n => String(n).padStart(2, "0");
+const iso = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+const TODAY = () => iso(new Date());
+const addDays = (s, n) => { const d = new Date(s + "T12:00:00"); d.setDate(d.getDate() + n); return iso(d); };
+const fmtD = s => s ? s.slice(8, 10) + "/" + s.slice(5, 7) : "—";
+const fmtDY = s => s ? s.slice(8, 10) + "/" + s.slice(5, 7) + "/" + s.slice(0, 4) : "—";
+const hm = min => { min = Math.round(min || 0); const neg = min < 0; min = Math.abs(min); return (neg ? "−" : "") + Math.floor(min / 60) + "h" + pad(min % 60); };
+const hrs = min => ((min || 0) / 60).toLocaleString("pt-BR", { maximumFractionDigits: 1 });
+const pct1 = (a, b) => b > 0 ? (a / b * 100) : null;
+const fmtPct = v => v == null ? "—" : v.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
+const toMin = t => { if (!t) return null; const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+
+const ICONS = {
+  home: '<path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/>',
+  cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  weeks: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  err: '<path d="M4 4h12l4 4v12H4z"/><path d="m9 11 6 6M15 11l-6 6"/>',
+  rev: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/>',
+  perf: '<path d="M3 21h18"/><rect x="5" y="11" width="3" height="7" rx="1"/><rect x="11" y="6" width="3" height="12" rx="1"/><rect x="17" y="13" width="3" height="5" rx="1"/>',
+  lib: '<path d="M4 4h4v16H4zM10 4h4v16h-4z"/><path d="m16 5 3.5-1 3 15.5-3.5 1z"/>',
+  close: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  more: '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  link: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+  clip: '<path d="m21 11-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2L9.8 17a1.8 1.8 0 0 1-2.6-2.6L15 6.6"/>',
+  q: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+  upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/>',
+  ext: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M19 14v6H4V5h6"/>',
+  flag: '<path d="M5 21V4h11l-2 4 2 4H5"/>',
+  dl: '<path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 20h16"/>',
+  spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+  file: '<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/>',
+};
+const ic = (n, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;
+
+const ERR_CATS = ["Falta de conhecimento do conteúdo", "Esquecimento", "Interpretação equivocada", "Desatenção", "Confusão entre conceitos", "Dúvida sobre legislação", "Falta de tempo", "Outro"];
+const STATUS = { pendente: ["Pendente", "pend"], andamento: ["Em andamento", "and"], concluido: ["Concluído", "ok"] };
+const ESTATUS = { pendente: ["Pendente", "bad"], revisao: ["Em revisão", "and"], corrigido: ["Corrigido", "ok"] };
+
+/* ================= armazenamento ================= */
+const S = { docs: new Map(), mode: "loading", db: null, col: null, assets: null, downloads: null, ready: false };
+const all = k => [...S.docs.values()].filter(d => d.kind === k);
+const get = id => S.docs.get(id);
+const settings = () => Object.assign({ metaDiaria: 480, almocoMin: 60, almocoPadrao: true, intervalos: "1, 7, 15, 30" }, get("settings") || {});
+let LS_KEY = "central-estudos-local-v1";
+
+function lsLoad() { try { const raw = localStorage.getItem(LS_KEY); if (raw) JSON.parse(raw).forEach(d => S.docs.set(d.id, d)); } catch (e) { } }
+function lsSave() { try { localStorage.setItem(LS_KEY, JSON.stringify([...S.docs.values()])); } catch (e) { } }
+
+async function put(doc) {
+  doc = JSON.parse(JSON.stringify(doc));
+  doc.atualizadoEm = new Date().toISOString();
+  S.docs.set(doc.id, doc);
+  if (S.mode === "db") {
+    try { const { id, ...body } = doc; await S.col.doc(id).set(body); }
+    catch (e) { toast(e && e.code === "quota_exceeded" ? "Espaço do banco cheio. Exclua registros antigos para continuar." : "Não consegui salvar. Verifique a conexão e tente de novo."); throw e; }
+  } else lsSave();
+}
+async function del(id) {
+  S.docs.delete(id);
+  if (S.mode === "db") { try { await S.col.doc(id).delete(); } catch (e) { toast("Não consegui excluir. Tente de novo."); } }
+  else lsSave();
+}
+
+async function boot() {
+  let db = null, user = null;
+  try {
+    const c = window.claude;
+    if (c && c.use) {
+      [db, user] = await Promise.all([c.use("db"), c.use("user")]);
+      c.use("assets").then(a => { S.assets = a; render(); });
+      c.use("downloads").then(d => { S.downloads = d; });
+    }
+  } catch (e) { }
+  let id = null;
+  if (db && user) { try { id = await user.id(); } catch (e) { } }
+  if (db && id) {
+    S.mode = "db"; S.db = db; S.col = db.collection("data/users/" + id);
+    S.col.limit(1000).onSnapshot(snap => {
+      if (animLock) { pendingSnap = snap; return; }
+      applySnap(snap);
+    }, () => { S.mode = "local"; lsLoad(); S.ready = true; render(); });
+  } else {
+    S.mode = "local"; lsLoad(); S.ready = true; render();
+  }
+}
+let animLock = false, pendingSnap = null;
+function applySnap(snap) {
+  const m = new Map();
+  snap.docs.forEach(d => { const v = d.data(); if (v) m.set(d.id, { id: d.id, ...v }); });
+  S.docs = m; S.ready = true; render();
+}
+
+/* ================= cálculos ================= */
+const weeks = () => all("week").sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+const contents = () => all("content").sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+const contentsOf = wid => contents().filter(c => c.weekId === wid);
+const sessions = () => all("session").sort((a, b) => (a.data + (a.inicio || "")).localeCompare(b.data + (b.inicio || "")));
+const errors = () => all("error").sort((a, b) => (b.data || "").localeCompare(a.data || ""));
+const reviews = () => all("review").sort((a, b) => (a.prevista || "").localeCompare(b.prevista || ""));
+const materials = () => all("material");
+const closingOf = wid => all("closing").find(c => c.weekId === wid);
+
+function sessionMin(s) {
+  if (s.minutosManuais != null && s.minutosManuais !== "") return Math.max(0, +s.minutosManuais);
+  const a = toMin(s.inicio), b = toMin(s.fim);
+  if (a == null || b == null) return 0;
+  let m = b - a; if (m < 0) m += 1440;
+  m -= (+s.pausasMin || 0);
+  if (s.almoco) m -= (+settings().almocoMin || 0);
+  return Math.max(0, m);
+}
+function weekOfDate(d) { return weeks().find(w => w.inicio && w.fim && w.inicio <= d && d <= w.fim); }
+function sessionWeek(s) {
+  if (s.contentId && get(s.contentId)) return get(s.contentId).weekId;
+  const w = weekOfDate(s.data); return w ? w.id : null;
+}
+const contentMin = cid => sessions().filter(s => s.contentId === cid).reduce((t, s) => t + sessionMin(s), 0);
+function weekStats(wid) {
+  const cs = contentsOf(wid);
+  const done = cs.filter(c => c.status === "concluido").length;
+  const and = cs.filter(c => c.status === "andamento").length;
+  const min = sessions().filter(s => sessionWeek(s) === wid).reduce((t, s) => t + sessionMin(s), 0);
+  const qr = cs.reduce((t, c) => t + (+c.qResolvidas || 0), 0);
+  const qc = cs.reduce((t, c) => t + (+c.qCorretas || 0), 0);
+  const w = get(wid) || {};
+  const meta = (+w.metaHoras || 0) * 60;
+  const errs = errors().filter(e => e.contentId && get(e.contentId) && get(e.contentId).weekId === wid);
+  return { total: cs.length, done, and, pend: cs.length - done - and, pct: cs.length ? done / cs.length * 100 : 0, min, meta, qr, qc, acc: pct1(qc, qr), errs };
+}
+function overall() {
+  const cs = contents();
+  const done = cs.filter(c => c.status === "concluido").length;
+  const and = cs.filter(c => c.status === "andamento").length;
+  const min = sessions().reduce((t, s) => t + sessionMin(s), 0);
+  const meta = weeks().reduce((t, w) => t + (+w.metaHoras || 0) * 60, 0);
+  const qr = cs.reduce((t, c) => t + (+c.qResolvidas || 0), 0);
+  const qc = cs.reduce((t, c) => t + (+c.qCorretas || 0), 0);
+  return { total: cs.length, done, and, pend: cs.length - done - and, pct: cs.length ? done / cs.length * 100 : 0, min, meta, qr, qc, acc: pct1(qc, qr) };
+}
+function currentWeek() {
+  const t = TODAY(); const ws = weeks();
+  return ws.find(w => w.inicio && w.fim && w.inicio <= t && t <= w.fim) || ws.find(w => weekStats(w.id).pct < 100) || ws[ws.length - 1];
+}
+const disciplinas = () => [...new Set(contents().map(c => c.disciplina).concat(errors().map(e => e.disciplina)).filter(Boolean))].sort((a, b) => a.localeCompare(b, "pt-BR"));
+function bySubject() {
+  const m = {};
+  contents().forEach(c => {
+    const k = (c.disciplina || "—") + "||" + (c.assunto || "—");
+    m[k] = m[k] || { disciplina: c.disciplina || "—", assunto: c.assunto || "—", qr: 0, qc: 0, erros: 0, revisoes: 0 };
+    m[k].qr += +c.qResolvidas || 0; m[k].qc += +c.qCorretas || 0;
+  });
+  errors().forEach(e => { const k = (e.disciplina || "—") + "||" + (e.assunto || "—"); m[k] = m[k] || { disciplina: e.disciplina || "—", assunto: e.assunto || "—", qr: 0, qc: 0, erros: 0, revisoes: 0 }; m[k].erros++; });
+  reviews().forEach(r => { const k = (r.disciplina || "—") + "||" + (r.assunto || "—"); if (m[k]) m[k].revisoes++; });
+  return Object.values(m);
+}
+function reinforce() {
+  return bySubject().filter(s => (s.qr >= 5 && s.qc / s.qr < .7) || s.erros >= 2)
+    .sort((a, b) => (b.erros - a.erros) || ((a.qr ? a.qc / a.qr : 1) - (b.qr ? b.qc / b.qr : 1))).slice(0, 6);
+}
+
+/* ================= UI helpers ================= */
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("on"), 2600); }
+function confirmBox(title, text, okLabel = "Excluir") {
+  return new Promise(res => {
+    const m = $("#modal");
+    m.innerHTML = `<h2>${esc(title)}</h2><p class="muted">${esc(text)}</p><div class="row" style="justify-content:flex-end"><button class="btn ghost" data-a="no">Cancelar</button><button class="btn danger" data-a="ok">${esc(okLabel)}</button></div>`;
+    m.classList.add("on"); $("#mscrim").classList.add("on");
+    const done = v => { m.classList.remove("on"); $("#mscrim").classList.remove("on"); res(v); };
+    m.querySelector('[data-a="no"]').onclick = () => done(false);
+    m.querySelector('[data-a="ok"]').onclick = () => done(true);
+    $("#mscrim").onclick = () => done(false);
+    m.querySelector('[data-a="ok"]').focus();
+  });
+}
+let drawerOnClose = null;
+function openDrawer(title, body, foot, onClose) {
+  $("#dTitle").textContent = title; $("#dBody").innerHTML = body; $("#dFoot").innerHTML = foot || "";
+  $("#drawer").classList.add("on"); $("#scrim").classList.add("on"); $("#dBody").scrollTop = 0;
+  drawerOnClose = onClose || null;
+}
+function closeDrawer() { $("#drawer").classList.remove("on"); $("#scrim").classList.remove("on"); $("#sheet").classList.remove("on"); if (drawerOnClose) { const f = drawerOnClose; drawerOnClose = null; f(); } }
+$("#dClose").onclick = closeDrawer; $("#scrim").onclick = closeDrawer;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+const checkSVG = on => `<svg viewBox="0 0 30 30"><circle class="ring" cx="15" cy="15" r="13"/><circle class="fill" cx="15" cy="15" r="14"/><path class="tick" d="M9.5 15.5l3.8 3.8 7.2-7.6"/></svg>`;
+const chip = (map, k) => { const s = map[k] || map.pendente; return `<span class="chip ${s[1]}"><i></i>${s[0]}</span>`; };
+const bar = p => `<div class="bar"><i style="width:${Math.max(0, Math.min(100, p || 0))}%"></i></div>`;
+const opts = (arr, sel, blank) => (blank != null ? `<option value="">${esc(blank)}</option>` : "") + arr.map(o => { const [v, l] = Array.isArray(o) ? o : [o, o]; return `<option value="${esc(v)}" ${v === sel ? "selected" : ""}>${esc(l)}</option>`; }).join("");
+const fld = (label, inner, cls = "", hint = "") => `<label class="fld ${cls}"><span>${label}</span>${inner}${hint ? `<small class="hint">${hint}</small>` : ""}</label>`;
+const empty = (icon, title, text, btn) => `<div class="empty"><div class="art">${ic(icon)}</div><h2>${esc(title)}</h2><p>${text}</p>${btn || ""}</div>`;
+const form = el => Object.fromEntries([...el.querySelectorAll("[name]")].map(i => [i.name, i.type === "checkbox" ? i.checked : i.value.trim()]));
+
+/* ---- gráficos SVG ---- */
+function barChart(labels, values, { fmt = v => v, target = null, h = 180 } = {}) {
+  if (!values.length) return "";
+  const W = 560, H = h, L = 36, B = 24, T = 10, R = 8;
+  const max = Math.max(1, ...values, ...(target ? target : [0])) * 1.1;
+  const bw = (W - L - R) / values.length;
+  const y = v => T + (H - T - B) * (1 - v / max);
+  let g = "";
+  for (let i = 0; i <= 3; i++) { const v = max / 1.1 * i / 3; g += `<line class="gl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 6}" y="${y(v) + 3}" text-anchor="end">${fmt(v)}</text>`; }
+  values.forEach((v, i) => {
+    const x = L + i * bw + bw * .2, w = bw * .6;
+    g += `<rect x="${x}" y="${y(v)}" width="${w}" height="${Math.max(0, H - B - y(v))}" rx="4" fill="var(--pink)"><title>${esc(labels[i])}: ${fmt(v)}</title></rect>`;
+    if (target && target[i]) g += `<line x1="${x - 3}" x2="${x + w + 3}" y1="${y(target[i])}" y2="${y(target[i])}" stroke="var(--ink)" stroke-width="2" stroke-dasharray="3 2"/>`;
+    g += `<text x="${x + w / 2}" y="${H - 8}" text-anchor="middle">${esc(labels[i])}</text>`;
+  });
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img">${g}</svg>`;
+}
+function lineChart(labels, values, { h = 180 } = {}) {
+  const pts = values.map((v, i) => [i, v]).filter(p => p[1] != null);
+  if (!pts.length) return `<p class="muted small" style="padding:40px 0;text-align:center">Registre questões para ver a evolução.</p>`;
+  const W = 560, H = h, L = 36, B = 24, T = 12, R = 14;
+  const x = i => L + (labels.length === 1 ? (W - L - R) / 2 : i * (W - L - R) / (labels.length - 1));
+  const y = v => T + (H - T - B) * (1 - v / 100);
+  let g = "";
+  [0, 50, 70, 100].forEach(v => g += `<line class="gl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" ${v === 70 ? 'stroke-dasharray="4 3"' : ""}/><text x="${L - 6}" y="${y(v) + 3}" text-anchor="end">${v}%</text>`);
+  const d = pts.map((p, i) => (i ? "L" : "M") + x(p[0]) + " " + y(p[1])).join(" ");
+  g += `<path d="${d} L${x(pts[pts.length - 1][0])} ${H - B} L${x(pts[0][0])} ${H - B}Z" fill="var(--pink)" opacity=".12"/>`;
+  g += `<path d="${d}" fill="none" stroke="var(--pink)" stroke-width="2.5" stroke-linejoin="round"/>`;
+  pts.forEach((p, i) => g += `<circle cx="${x(p[0])}" cy="${y(p[1])}" r="${i === pts.length - 1 ? 5 : 3.5}" fill="${i === pts.length - 1 ? "var(--pink)" : "var(--white)"}" stroke="var(--pink)" stroke-width="2"><title>${esc(labels[p[0]])}: ${fmtPct(p[1])}</title></circle>`);
+  labels.forEach((l, i) => g += `<text x="${x(i)}" y="${H - 8}" text-anchor="middle">${esc(l)}</text>`);
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img">${g}</svg>`;
+}
+const hbars = rows => rows.map(r => `<div class="hb"><span class="lbl" title="${esc(r.l)}">${esc(r.l)}</span>${bar(r.p)}<span class="v">${r.v}</span></div>`).join("");
+
+/* ================= navegação ================= */
+const VIEWS = [
+  ["visao", "Visão geral", "home"], ["crono", "Meu cronograma", "cal"], ["semanas", "Semanas de estudo", "weeks"],
+  ["erros", "Caderno de erros", "err"], ["revisoes", "Revisões", "rev"], ["desempenho", "Desempenho por disciplina", "perf"],
+  ["horas", "Horas líquidas", "clock"], ["biblioteca", "Biblioteca de materiais", "lib"], ["fechamentos", "Fechamentos semanais", "close"],
+];
+let route = "visao", selWeek = null;
+try { const h = location.hash.slice(1); if (VIEWS.some(v => v[0] === h)) route = h; } catch (e) { }
+function go(r, opt) { route = r; if (opt && opt.week) selWeek = opt.week; closeDrawer(); render(); window.scrollTo(0, 0); }
+function navHTML(list) {
+  const due = reviews().filter(r => r.status !== "concluida" && r.prevista && r.prevista <= TODAY()).length;
+  return list.map(([k, l, i]) => `<button data-go="${k}" ${route === k ? 'aria-current="page"' : ""}>${ic(i)}<span>${l}</span>${k === "revisoes" && due ? `<span class="count">${due}</span>` : ""}</button>`).join("");
+}
+document.addEventListener("click", e => {
+  const g = e.target.closest("[data-go]"); if (g) { go(g.dataset.go, g.dataset.week ? { week: g.dataset.week } : null); return; }
+});
+$("#goCrono").onclick = () => go("crono");
+
+/* ================= render ================= */
+function render() {
+  if (animLock) return;
+  $("#nav").innerHTML = navHTML(VIEWS);
+  const bn = [["visao", "Início", "home"], ["semanas", "Semanas", "weeks"], ["erros", "Erros", "err"], ["revisoes", "Revisões", "rev"]];
+  $("#bnav").innerHTML = navHTML(bn) + `<button id="moreBtn" ${bn.some(b => b[0] === route) ? "" : 'aria-current="page"'}>${ic("more")}<span>Mais</span></button>`;
+  $("#moreBtn").onclick = () => { $("#sheetNav").innerHTML = navHTML(VIEWS); $("#sheet").classList.add("on"); $("#scrim").classList.add("on"); };
+  const o = overall(); const cw = currentWeek();
+  $("#ovBar").style.width = o.pct + "%";
+  $("#ovTxt").textContent = `${Math.round(o.pct)}% do plano · ${o.done}/${o.total}`;
+  $("#weekPill").innerHTML = `<i></i><span>${cw ? esc(cw.nome) + (cw.inicio ? ` · ${fmtD(cw.inicio)}–${fmtD(cw.fim)}` : "") : "Nenhuma semana cadastrada"}</span>`;
+  $("#weekPill").style.cursor = cw ? "pointer" : "";
+  $("#weekPill").onclick = () => cw && go("semanas", { week: cw.id });
+  const modeTxt = S.mode === "db" ? "Salvo na nuvem · disponível em qualquer dispositivo" : S.mode === "local" ? "Modo local · salvo só neste navegador" : "Conectando…";
+  $("#footTxt").textContent = modeTxt;
+  $("#sideFoot").innerHTML = `<span>${modeTxt}</span>`;
+  if (!S.ready) { $("#view").innerHTML = `<div class="card">${empty("spark", "Abrindo sua central", "Buscando seus registros…")}</div>`; return; }
+  const v = { visao: vVisao, crono: vCrono, semanas: vSemanas, erros: vErros, revisoes: vRevisoes, desempenho: vDesempenho, horas: vHoras, biblioteca: vBiblioteca, fechamentos: vFechamentos }[route];
+  const pl = settings().plano; $(".side .brand small").textContent = pl ? "Prefeitura de Curitiba" : "Concurso público";
+  $("#view").innerHTML = (S.mode === "local" ? localBanner() : "") + (!settings().planoImportado ? planBanner() : "") + (hasExample() ? exampleBanner() : "") + v();
+  bindView();
+}
+const planCount = () => PLANO.semanas.reduce((a, s) => a + s.dias.reduce((b, d) => b + d.itens.length, 0), 0);
+const planBanner = () => `<div class="banner" style="background:var(--white);box-shadow:var(--shadow)">${ic("upload")}<span><b>Sua planilha está pronta para entrar.</b> ${PLANO.semanas.length} semanas e ${planCount()} assuntos de “${esc(PLANO.titulo)}”.</span><div class="row"><button class="btn sm primary" data-act="import-plan">Conferir e importar</button></div></div>`;
+const hasExample = () => [...S.docs.values()].some(d => d.exemplo);
+const exampleBanner = () => `<div class="banner">${ic("spark", "")}<span><b>Dados de exemplo.</b> Os registros abaixo servem só para você ver a central funcionando.</span><div class="row"><button class="btn sm primary" data-act="clear-example">Apagar exemplos</button></div></div>`;
+const localBanner = () => `<div class="banner" style="background:var(--warn-soft)"><span><b style="color:var(--warn)">Modo local.</b> Você está numa prévia sem banco de dados: os registros ficam só neste navegador e anexos estão desativados. Abra pelo link da página para salvar na nuvem.</span></div>`;
+
+/* ---------- Visão geral ---------- */
+function vVisao() {
+  const ws = weeks();
+  if (!ws.length) return `<div class="page-h"><div><span class="eyebrow">Visão geral</span><h1>Sua central está pronta</h1></div></div>
+    <div class="card">${empty("cal", "Comece pelo seu cronograma", "Crie a primeira semana e cadastre os assuntos, ou importe a planilha de acompanhamento. Os indicadores aparecem aqui conforme você registra.",
+    `<div class="row" style="justify-content:center">${!settings().planoImportado ? `<button class="btn primary" data-act="import-plan">${ic("upload")}Importar minha planilha</button>` : ""}<button class="btn ghost" data-act="new-week">${ic("plus")}Criar primeira semana</button><button class="btn ghost" data-act="import">${ic("upload")}Importar planilha</button><button class="btn ghost" data-act="seed">${ic("spark")}Ver com dados de exemplo</button></div>`)}</div>`;
+  const o = overall(); const t = TODAY();
+  const revPend = reviews().filter(r => r.status !== "concluida").length;
+  const k = (l, b, s) => `<div class="kpi"><label>${l}</label><b>${b}</b>${s ? `<small>${s}</small>` : ""}</div>`;
+  const kpis = `<div class="kpis">
+    <div class="kpi lead"><label>Conclusão do planejamento</label><b class="num">${Math.round(o.pct)}%</b><small>${o.done} de ${o.total} conteúdos concluídos</small>${bar(o.pct)}</div>
+    ${k("Em andamento", o.and, "conteúdos abertos")}
+    ${k("Pendentes", o.pend, "ainda não iniciados")}
+    ${k("Horas líquidas", hm(o.min), o.meta ? `meta ${hm(o.meta)} · ${Math.round(o.min / o.meta * 100)}%` : "defina metas nas semanas")}
+    ${k("Questões resolvidas", o.qr.toLocaleString("pt-BR"), `${o.qc.toLocaleString("pt-BR")} corretas`)}
+    ${k("Acertos", fmtPct(o.acc), "corretas ÷ resolvidas")}
+    ${k("Erros registrados", errors().length, `${errors().filter(e => e.status !== "corrigido").length} sem correção`)}
+    ${k("Revisões pendentes", revPend, `${reviews().filter(r => r.status !== "concluida" && r.prevista && r.prevista < t).length} atrasadas`)}
+  </div>`;
+  // próximos passos
+  const cw = currentWeek();
+  const nextC = contents().filter(c => c.status !== "concluido" && (c.weekId === (cw && cw.id) || (c.prevista && c.prevista <= t))).slice(0, 6);
+  const revToday = reviews().filter(r => r.status !== "concluida" && r.prevista && r.prevista <= t).slice(0, 6);
+  const steps = `<div class="grid g2">
+    <div class="card"><div class="card-h"><h2>Próximos passos</h2><p>${cw ? esc(cw.nome) : ""}</p></div>
+      ${nextC.length ? `<div class="subj">${nextC.map(cItem).join("")}</div>` : `<p class="muted small">Nenhum conteúdo pendente na semana atual.</p>`}</div>
+    <div class="card"><div class="card-h"><h2>Revisões de hoje</h2><button class="btn sm ghost" data-go="revisoes">Ver todas</button></div>
+      ${revToday.length ? `<div class="list">${revToday.map(revItem).join("")}</div>` : `<p class="muted small">Nada para revisar hoje.</p>`}</div>
+  </div>`;
+  // gráficos
+  const lbl = ws.map((w, i) => "S" + (i + 1));
+  const st = ws.map(w => weekStats(w.id));
+  const disc = disciplinas().map(d => { const cs = contents().filter(c => c.disciplina === d); const qr = cs.reduce((a, c) => a + (+c.qResolvidas || 0), 0), qc = cs.reduce((a, c) => a + (+c.qCorretas || 0), 0); return { l: d, p: pct1(qc, qr) || 0, v: fmtPct(pct1(qc, qr)), qr }; }).filter(r => r.qr > 0).sort((a, b) => b.p - a.p);
+  const charts = `<div class="grid g2">
+    <div class="card"><div class="card-h"><h2>Horas líquidas por semana</h2><p>barra = realizado · traço = meta</p></div>${barChart(lbl, st.map(s => s.min / 60), { fmt: v => Math.round(v) + "h", target: st.map(s => s.meta / 60) })}</div>
+    <div class="card"><div class="card-h"><h2>Evolução dos acertos</h2><p>linha tracejada = 70%</p></div>${lineChart(lbl, st.map(s => s.acc))}</div>
+    <div class="card"><div class="card-h"><h2>Desempenho por disciplina</h2><p>% de acertos</p></div>${disc.length ? hbars(disc) : `<p class="muted small">Registre questões nos conteúdos para comparar disciplinas.</p>`}</div>
+    <div class="card"><div class="card-h"><h2>Conteúdos concluídos por semana</h2></div>${barChart(lbl, st.map(s => s.done), { fmt: v => Math.round(v) })}</div>
+  </div>`;
+  return `<div class="page-h"><div><span class="eyebrow">Visão geral</span><h1>${greeting()}</h1><p>${cw ? `Você está na ${esc(cw.nome)}. ${weekStats(cw.id).pend + weekStats(cw.id).and} conteúdos em aberto nesta semana.` : ""}</p></div>
+    <div class="row"><button class="btn ghost" data-act="new-session">${ic("clock")}Registrar horas</button><button class="btn primary" data-act="new-error">${ic("plus")}Registrar erro</button></div></div>
+    ${kpis}${steps}${charts}`;
+}
+const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Bom dia, bons estudos" : h < 18 ? "Boa tarde, bons estudos" : "Boa noite, bons estudos"; };
+
+/* ---------- item de conteúdo ---------- */
+function cItem(c) {
+  const done = c.status === "concluido";
+  const mats = materials().filter(m => m.contentId === c.id).length;
+  const ers = errors().filter(e => e.contentId === c.id).length;
+  const min = contentMin(c.id);
+  const acc = pct1(+c.qCorretas || 0, +c.qResolvidas || 0);
+  return `<div class="citem ${done ? "done" : ""}" data-cid="${c.id}">
+    <button class="check ${done ? "on no-anim" : ""}" data-act="toggle" data-id="${c.id}" aria-pressed="${done}" aria-label="${done ? "Reabrir" : "Marcar como concluído"}: ${esc(c.assunto)}">${checkSVG()}</button>
+    <div style="min-width:0"><div class="ttl" data-act="open-content" data-id="${c.id}">${esc(c.assunto || "Assunto sem nome")}</div>
+      <div class="meta"><span>${esc(c.disciplina || "Sem disciplina")}</span>
+        ${c.prevista && !(route === "semanas" && wGroup === "dia") ? `<span>${ic("cal")}${fmtD(c.prevista)}</span>` : ""}
+        ${c.planejadoMin ? `<span>${hm(c.planejadoMin)} previstas</span>` : ""}
+        ${min ? `<span>${ic("clock")}${hm(min)}</span>` : ""}
+        ${+c.qResolvidas ? `<span>${ic("q")}${c.qCorretas || 0}/${c.qResolvidas} · ${fmtPct(acc)}</span>` : ""}
+        ${mats ? `<span>${ic("clip")}${mats}</span>` : ""}
+        ${ers ? `<span style="color:var(--bad)">${ic("err")}${ers}</span>` : ""}
+        ${c.revisar ? `<span style="color:var(--pink-ink)">${ic("flag")}revisar</span>` : ""}
+      </div></div>
+    <div class="right">${chip(STATUS, c.status)}</div>
+  </div>`;
+}
+function revItem(r) {
+  const t = TODAY(); const late = r.status !== "concluida" && r.prevista && r.prevista < t;
+  return `<div class="li"><div class="stripe ${r.status === "concluida" ? "ok" : late ? "bad" : r.prevista === t ? "pink" : ""}"></div>
+    <div class="body"><b>${esc(r.assunto || "Assunto")}</b><p>${esc(r.disciplina || "")} · ${esc(r.motivo || "")} · ${r.status === "concluida" ? "feita em " + fmtD(r.concluidaEm) : (late ? "atrasada desde " : "prevista ") + fmtD(r.prevista)}</p></div>
+    ${r.status !== "concluida" ? `<button class="btn sm primary" data-act="done-review" data-id="${r.id}">Concluir</button>` : `<button class="btn sm ghost" data-act="done-review" data-id="${r.id}">Ver</button>`}</div>`;
+}
+
+/* ---------- Cronograma ---------- */
+let cf = { disc: "", status: "", q: "" };
+function vCrono() {
+  const ws = weeks();
+  const head = `<div class="page-h"><div><span class="eyebrow">Meu cronograma</span><h1>Planejamento completo</h1><p>Todas as semanas e assuntos na ordem do seu plano. Marque o check para concluir.</p></div>
+    <div class="row"><button class="btn ghost" data-act="import">${ic("upload")}Importar planilha</button><button class="btn ghost" data-act="new-week">${ic("plus")}Nova semana</button><button class="btn primary" data-act="new-content">${ic("plus")}Novo conteúdo</button></div></div>`;
+  if (!ws.length) return head + `<div class="card">${empty("cal", "Nenhuma semana ainda", "Crie uma semana e adicione os assuntos, ou importe a planilha original para trazer tudo de uma vez.", `<div class="row" style="justify-content:center"><button class="btn primary" data-act="new-week">Criar semana</button><button class="btn ghost" data-act="seed">Ver com dados de exemplo</button></div>`)}</div>`;
+  const filt = `<div class="filters"><select id="cfDisc">${opts(disciplinas(), cf.disc, "Todas as disciplinas")}</select><select id="cfStatus">${opts(Object.entries(STATUS).map(([k, v]) => [k, v[0]]), cf.status, "Todos os status")}</select><input id="cfQ" placeholder="Buscar assunto" value="${esc(cf.q)}"></div>`;
+  const body = ws.map((w, i) => {
+    const cs = contentsOf(w.id).filter(c => (!cf.disc || c.disciplina === cf.disc) && (!cf.status || c.status === cf.status) && (!cf.q || (c.assunto || "").toLowerCase().includes(cf.q.toLowerCase())));
+    const st = weekStats(w.id);
+    if (!cs.length && (cf.disc || cf.status || cf.q)) return "";
+    return `<div class="card"><div class="card-h"><div><span class="eyebrow">Semana ${i + 1}</span><h2>${esc(w.nome)}</h2><p>${w.inicio ? fmtDY(w.inicio) + " a " + fmtDY(w.fim) : "Período a definir"}</p></div>
+      <div class="row" style="min-width:200px"><div style="flex:1">${bar(st.pct)}</div><span class="small num">${st.done}/${st.total}</span><button class="btn sm ghost" data-go="semanas" data-week="${w.id}">Abrir</button></div></div>
+      ${cs.length ? `<div class="subj">${cs.map(cItem).join("")}</div>` : `<p class="muted small">Sem conteúdos. <button class="btn sm ghost" data-act="new-content" data-week="${w.id}">Adicionar</button></p>`}</div>`;
+  }).join("");
+  const pl = settings().plano;
+  const info = pl ? `<div class="card"><div class="card-h" style="margin-bottom:8px"><div><span class="eyebrow">Sobre o plano</span><h2>${esc(pl.titulo)}</h2></div></div><div class="grid g3" style="gap:10px">
+    <div><span class="muted small">Período</span><p>${esc(pl.periodo)}</p></div><div><span class="muted small">Carga diária</span><p>${esc(pl.carga)}</p></div><div><span class="muted small">Distribuição diária</span><p>${esc(pl.distribuicao)}</p></div></div>
+    ${pl.observacao ? `<p class="small muted" style="margin-top:10px">${esc(pl.observacao)}</p>` : ""}</div>` : "";
+  return head + info + filt + (body || `<div class="card"><p class="muted">Nenhum conteúdo com esses filtros.</p></div>`);
+}
+
+/* ---------- Semanas ---------- */
+let wGroup = "dia";
+function vSemanas() {
+  const ws = weeks();
+  if (!ws.length) return `<div class="page-h"><div><span class="eyebrow">Semanas de estudo</span><h1>Semanas</h1></div></div><div class="card">${empty("weeks", "Nenhuma semana cadastrada", "Cada semana do seu plano terá uma página própria com conteúdos, horas, questões, erros e fechamento.", `<button class="btn primary" data-act="new-week">Criar semana</button>`)}</div>`;
+  if (!selWeek || !get(selWeek)) selWeek = (currentWeek() || ws[0]).id;
+  const cw = currentWeek();
+  const tabs = `<div class="wtabs" role="tablist">${ws.map((w, i) => { const s = weekStats(w.id); return `<button class="wtab ${cw && cw.id === w.id ? "now" : ""}" role="tab" aria-selected="${w.id === selWeek}" data-act="sel-week" data-id="${w.id}"><b>Semana ${i + 1}</b><small>${w.inicio ? fmtD(w.inicio) + "–" + fmtD(w.fim) : esc(w.nome)}</small>${bar(s.pct)}</button>`; }).join("")}
+    <button class="wtab" data-act="new-week" style="justify-content:center;align-items:center;color:var(--pink-ink)"><b>+ Nova</b></button></div>`;
+  const w = get(selWeek), st = weekStats(w.id), idx = ws.indexOf(w);
+  const cs = contentsOf(w.id);
+  const groups = {};
+  cs.forEach(c => { const k = wGroup === "dia" ? (c.prevista || "Sem data") : (c.disciplina || "Sem disciplina"); (groups[k] = groups[k] || []).push(c); });
+  const daySess = d => sessions().filter(x => x.data === d).reduce((a, x) => a + sessionMin(x), 0);
+  const gTitle = k => wGroup === "dia" && /^\d{4}-/.test(k) ? `${esc((groups[k][0].dia || "").replace("-feira", ""))} ${fmtD(k)}${daySess(k) ? ` <span class="chip pink" style="text-transform:none;letter-spacing:0">${hm(daySess(k))} estudadas</span>` : ""}` : esc(k);
+  const prev = ws[idx - 1], next = ws[idx + 1];
+  const head = `<div class="card" style="display:flex;flex-direction:column;gap:14px">
+    <div class="card-h" style="margin:0"><div><span class="eyebrow">Semana ${idx + 1} de ${ws.length}</span><h1>${esc(w.nome)}</h1><p>${w.inicio ? fmtDY(w.inicio) + " a " + fmtDY(w.fim) : "Período a definir"} · meta ${w.metaHoras ? w.metaHoras + "h" : "não definida"}</p></div>
+      <div class="row">${prev ? `<button class="btn sm ghost" data-act="sel-week" data-id="${prev.id}">‹ Anterior</button>` : ""}${next ? `<button class="btn sm ghost" data-act="sel-week" data-id="${next.id}">Próxima ›</button>` : ""}<button class="icon-btn" data-act="edit-week" data-id="${w.id}" aria-label="Editar semana">${ic("edit")}</button></div></div>
+    <div class="row"><div style="flex:1;min-width:160px">${bar(st.pct)}</div><b class="num">${Math.round(st.pct)}%</b><span class="muted small">${st.done} concluídos · ${st.and} em andamento · ${st.pend} pendentes</span></div>
+  </div>`;
+  const list = `<div class="card"><div class="card-h"><h2>Conteúdos programados</h2><div class="row"><div class="seg" role="group" aria-label="Agrupar"><button data-act="wgroup" data-g="dia" aria-pressed="${wGroup === "dia"}">Por dia</button><button data-act="wgroup" data-g="disc" aria-pressed="${wGroup === "disc"}">Por disciplina</button></div><button class="btn sm primary" data-act="new-content" data-week="${w.id}">${ic("plus")}Conteúdo</button></div></div>
+    ${cs.length ? Object.keys(groups).sort().map(d => [d, groups[d]]).map(([d, arr]) => `<div class="subj"><div class="subj-h"><span class="dot"></span>${gTitle(d)}<span class="muted" style="font-weight:500">· ${arr.filter(c => c.status === "concluido").length}/${arr.length}</span></div>${arr.map(cItem).join("")}</div>`).join("") : `<p class="muted small">Nenhum conteúdo nesta semana. Adicione o primeiro assunto.</p>`}</div>`;
+  const mats = materials().filter(m => m.weekId === w.id || cs.some(c => c.id === m.contentId));
+  const reg = `<div class="grid g2">
+    <div class="card"><div class="card-h"><h2>Horas e questões</h2><button class="btn sm ghost" data-act="new-session" data-week="${w.id}">${ic("clock")}Registrar horas</button></div>
+      <div class="grid g2" style="gap:10px">
+        <div><span class="muted small">Horas líquidas</span><div class="num" style="font-size:1.4rem;font-weight:600">${hm(st.min)}</div>${st.meta ? bar(st.min / st.meta * 100) : ""}<span class="muted small">${st.meta ? `${Math.round(st.min / st.meta * 100)}% da meta de ${hm(st.meta)}` : "sem meta"}</span></div>
+        <div><span class="muted small">Questões</span><div class="num" style="font-size:1.4rem;font-weight:600">${st.qc}/${st.qr}</div><span class="muted small">acertos ${fmtPct(st.acc)}</span></div>
+      </div></div>
+    <div class="card"><div class="card-h"><h2>Materiais da semana</h2><button class="btn sm ghost" data-go="biblioteca">Biblioteca</button></div>
+      ${mats.length ? `<div class="list">${mats.slice(0, 6).map(matItem).join("")}</div>` : `<p class="muted small">Vincule links ou anexe arquivos dentro de cada conteúdo.</p>`}</div>
+  </div>`;
+  const errs = `<div class="card"><div class="card-h"><h2>Principais erros</h2><button class="btn sm ghost" data-act="new-error" data-week="${w.id}">${ic("plus")}Registrar erro</button></div>
+    ${st.errs.length ? `<div class="list">${st.errs.slice(0, 5).map(errItem).join("")}</div>` : `<p class="muted small">Nenhum erro ligado aos conteúdos desta semana.</p>`}</div>`;
+  return `<div class="page-h"><div><span class="eyebrow">Semanas de estudo</span></div></div>` + tabs + head + list + reg + errs + closingSection(w);
+}
+
+/* ---------- Fechamento ---------- */
+function closingSection(w) {
+  const st = weekStats(w.id); const c = closingOf(w.id) || {};
+  const sugg = reinforce().filter(s => contentsOf(w.id).some(x => x.assunto === s.assunto)).map(s => s.assunto);
+  const fin = c.finalizadaEm;
+  return `<div class="card" id="closing"><div class="card-h"><div><span class="eyebrow">Fechamento da semana</span><h2>${fin ? "Semana finalizada em " + fmtDY(fin.slice(0, 10)) : "Como foi esta semana"}</h2></div>${fin ? `<span class="chip ok"><i></i>Finalizada</span>` : ""}</div>
+    <div class="summary-hero" style="margin-bottom:16px">
+      <div><label>Horas líquidas</label><b class="num">${hm(st.min)}</b><small>${st.meta ? Math.round(st.min / st.meta * 100) + "% da meta (" + hm(st.meta) + ")" : "meta não definida"}</small></div>
+      <div><label>Questões</label><b class="num">${st.qr}</b><small>${st.qc} corretas</small></div>
+      <div><label>Acertos</label><b class="num">${fmtPct(st.acc)}</b><small>corretas ÷ resolvidas</small></div>
+      <div><label>Conteúdos</label><b class="num">${st.done}/${st.total}</b><small>${st.pend + st.and} em aberto</small></div>
+    </div>
+    <form class="form" id="closingForm">
+      ${fld("Principais dificuldades", `<textarea name="dificuldades" id="cl-dif">${esc(c.dificuldades)}</textarea>`)}
+      ${fld("Assuntos para reforçar", `<textarea name="reforcar" id="cl-ref">${esc(c.reforcar || (sugg.length && !c.id ? sugg.join("\n") : ""))}</textarea>`, "", sugg.length ? "Sugestão a partir dos acertos e erros" : "")}
+      ${fld("Observações e aprendizados", `<textarea name="observacoes" id="cl-obs">${esc(c.observacoes)}</textarea>`)}
+      ${fld("Prioridades para a próxima semana", `<textarea name="prioridades" id="cl-pri">${esc(c.prioridades)}</textarea>`)}
+      <div class="full row" style="justify-content:flex-end"><button type="button" class="btn ghost" data-act="save-closing" data-id="${w.id}">Salvar anotações</button><button type="button" class="btn primary" data-act="finish-week" data-id="${w.id}">${fin ? "Atualizar fechamento" : "Finalizar semana"}</button></div>
+    </form></div>`;
+}
+async function saveClosing(wid, finish) {
+  const f = form($("#closingForm"));
+  const c = closingOf(wid) || { id: "cl_" + wid, kind: "closing", weekId: wid };
+  Object.assign(c, f);
+  if (finish) c.finalizadaEm = new Date().toISOString();
+  await put(c); toast(finish ? "Semana finalizada" : "Anotações salvas");
+  if (finish) showWeekSummary(wid);
+}
+function showWeekSummary(wid) {
+  const w = get(wid), st = weekStats(wid), c = closingOf(wid) || {};
+  openDrawer("Resumo · " + w.nome, `<div class="summary-hero">
+      <div><label>Horas</label><b>${hm(st.min)}</b></div><div><label>Meta</label><b>${st.meta ? Math.round(st.min / st.meta * 100) + "%" : "—"}</b></div>
+      <div><label>Acertos</label><b>${fmtPct(st.acc)}</b></div><div><label>Concluídos</label><b>${st.done}/${st.total}</b></div></div>
+    <div class="sect"><h3>Por disciplina</h3>${hbars([...new Set(contentsOf(wid).map(x => x.disciplina))].map(d => { const cs = contentsOf(wid).filter(x => x.disciplina === d); const dn = cs.filter(x => x.status === "concluido").length; return { l: d || "—", p: dn / cs.length * 100, v: dn + "/" + cs.length }; }))}</div>
+    ${c.dificuldades ? `<div class="sect"><h3>Dificuldades</h3><p>${esc(c.dificuldades).replace(/\n/g, "<br>")}</p></div>` : ""}
+    ${c.reforcar ? `<div class="sect"><h3>Para reforçar</h3><p>${esc(c.reforcar).replace(/\n/g, "<br>")}</p></div>` : ""}
+    ${c.prioridades ? `<div class="sect"><h3>Prioridades da próxima semana</h3><p>${esc(c.prioridades).replace(/\n/g, "<br>")}</p></div>` : ""}`,
+    `<button class="btn primary" id="sumOk">Fechar</button>`);
+  $("#sumOk").onclick = closeDrawer;
+}
+
+/* ---------- Caderno de erros ---------- */
+let ef = { disc: "", status: "", q: "", de: "", ate: "" };
+function errItem(e) {
+  return `<div class="li"><div class="stripe ${e.status === "corrigido" ? "ok" : e.status === "revisao" ? "warn" : "bad"}"></div>
+    <div class="body"><div class="row" style="gap:6px"><b style="flex:1;min-width:0">${esc(e.assunto || "Assunto não informado")}</b>${chip(ESTATUS, e.status)}</div>
+    <p>${esc(e.disciplina || "—")} · ${fmtD(e.data)}${e.categoria ? " · " + esc(e.categoria) : ""}${e.questao ? " · " + esc(e.questao) : ""}</p>
+    ${e.explicacao ? `<p style="color:var(--ink)">${esc(e.explicacao).slice(0, 160)}${e.explicacao.length > 160 ? "…" : ""}</p>` : ""}</div>
+    <button class="icon-btn" data-act="edit-error" data-id="${e.id}" aria-label="Editar">${ic("edit")}</button></div>`;
+}
+function vErros() {
+  const head = `<div class="page-h"><div><span class="eyebrow">Caderno de erros</span><h1>O que errei e como corrigir</h1><p>Registre rápido, complete depois. Nenhum campo é obrigatório.</p></div><button class="btn primary" data-act="new-error">${ic("plus")}Registrar erro</button></div>`;
+  const es = errors();
+  if (!es.length) return head + `<div class="card">${empty("err", "Nenhum erro registrado", "Quando errar uma questão, anote aqui o motivo e a explicação certa. Os assuntos com mais erros aparecem destacados para revisão.", `<button class="btn primary" data-act="new-error">Registrar o primeiro erro</button>`)}</div>`;
+  const list = es.filter(e => (!ef.disc || e.disciplina === ef.disc) && (!ef.status || e.status === ef.status) && (!ef.q || ((e.assunto || "") + " " + (e.enunciado || "")).toLowerCase().includes(ef.q.toLowerCase())) && (!ef.de || e.data >= ef.de) && (!ef.ate || e.data <= ef.ate));
+  const top = bySubject().filter(s => s.erros).sort((a, b) => b.erros - a.erros).slice(0, 6);
+  const maxE = Math.max(1, ...top.map(t => t.erros));
+  const cats = ERR_CATS.map(c => ({ l: c, n: es.filter(e => e.categoria === c).length })).filter(c => c.n);
+  return head + `<div class="grid g2">
+    <div class="card"><div class="card-h"><h2>Assuntos com mais erros</h2></div>${hbars(top.map(t => ({ l: t.assunto, p: t.erros / maxE * 100, v: t.erros })))}</div>
+    <div class="card"><div class="card-h"><h2>Por motivo</h2><p>${es.filter(e => e.status !== "corrigido").length} ainda sem correção</p></div>${cats.length ? hbars(cats.map(c => ({ l: c.l, p: c.n / es.length * 100, v: c.n }))) : `<p class="muted small">Classifique o motivo dos erros para ver o padrão.</p>`}</div></div>
+    <div class="filters"><select id="efDisc">${opts(disciplinas(), ef.disc, "Todas as disciplinas")}</select><select id="efStatus">${opts(Object.entries(ESTATUS).map(([k, v]) => [k, v[0]]), ef.status, "Todos os status")}</select><input id="efQ" placeholder="Buscar assunto" value="${esc(ef.q)}"><input type="date" id="efDe" value="${ef.de}" aria-label="De"><input type="date" id="efAte" value="${ef.ate}" aria-label="Até"></div>
+    <div class="list">${list.map(errItem).join("") || `<div class="card"><p class="muted">Nenhum erro com esses filtros.</p></div>`}</div>`;
+}
+function errorForm(e = {}, ctx = {}) {
+  const isNew = !e.id;
+  const c = e.contentId ? get(e.contentId) : ctx.contentId ? get(ctx.contentId) : null;
+  const cOpts = contents().map(x => [x.id, (x.disciplina ? x.disciplina + " · " : "") + x.assunto]);
+  openDrawer(isNew ? "Registrar erro" : "Editar erro", `<form class="form" id="errForm">
+    ${fld("Conteúdo do cronograma", `<select name="contentId" id="ef-c">${opts(cOpts, e.contentId || (c && c.id) || "", "Não vincular")}</select>`, "full", "Preenche disciplina e assunto automaticamente")}
+    ${fld("Disciplina", `<input name="disciplina" id="ef-d" list="dlDisc" value="${esc(e.disciplina || (c && c.disciplina) || "")}">`)}
+    ${fld("Assunto específico", `<input name="assunto" id="ef-a" value="${esc(e.assunto || (c && c.assunto) || "")}">`)}
+    ${fld("Data do erro", `<input type="date" name="data" id="ef-dt" value="${e.data || TODAY()}">`)}
+    ${fld("Questão ou referência", `<input name="questao" id="ef-q" value="${esc(e.questao)}" placeholder="Ex.: Q123456, prova 2024">`)}
+    ${fld("Enunciado ou resumo", `<textarea name="enunciado" id="ef-en">${esc(e.enunciado)}</textarea>`, "full")}
+    ${fld("Resposta escolhida", `<input name="escolhida" id="ef-es" value="${esc(e.escolhida)}">`)}
+    ${fld("Resposta correta", `<input name="correta" id="ef-co" value="${esc(e.correta)}">`)}
+    ${fld("Motivo do erro", `<select name="categoria" id="ef-cat">${opts(ERR_CATS, e.categoria || "", "Selecione")}</select>`)}
+    ${fld("Status", `<select name="status" id="ef-st">${opts(Object.entries(ESTATUS).map(([k, v]) => [k, v[0]]), e.status || "pendente")}</select>`)}
+    ${fld("Explicação da resposta correta", `<textarea name="explicacao" id="ef-ex">${esc(e.explicacao)}</textarea>`, "full")}
+    ${fld("Como corrigir a dificuldade", `<textarea name="correcao" id="ef-cr">${esc(e.correcao)}</textarea>`, "full")}
+    ${fld("Próxima revisão", `<input type="date" name="proxRevisao" id="ef-pr" value="${e.proxRevisao || ""}">`, "", "Cria uma revisão automaticamente")}
+    ${fld("Observações", `<input name="obs" id="ef-ob" value="${esc(e.obs)}">`)}
+    ${(e.historico || []).length ? `<div class="full sect"><h3>Histórico</h3>${e.historico.map(h => `<p class="small muted">${fmtDY(h.em.slice(0, 10))} · ${esc(h.de)} → ${esc(h.para)}</p>`).join("")}</div>` : ""}
+    <datalist id="dlDisc">${disciplinas().map(d => `<option value="${esc(d)}">`).join("")}</datalist>
+  </form>`, `${!isNew ? `<button class="btn danger" id="efDel">${ic("trash")}Excluir</button><span style="flex:1"></span>` : ""}<button class="btn ghost" id="efCancel">Cancelar</button><button class="btn primary" id="efSave">Salvar erro</button>`);
+  $("#ef-c").onchange = ev => { const x = get(ev.target.value); if (x) { $("#ef-d").value = x.disciplina || ""; $("#ef-a").value = x.assunto || ""; } };
+  $("#efCancel").onclick = closeDrawer;
+  if (!isNew) $("#efDel").onclick = async () => { if (await confirmBox("Excluir este erro?", "O registro e seu histórico serão apagados. Revisões criadas a partir dele continuam na lista.")) { await del(e.id); closeDrawer(); toast("Erro excluído"); render(); } };
+  $("#efSave").onclick = async () => {
+    const f = form($("#errForm")); const rec = Object.assign({}, e, f, { kind: "error" });
+    if (!rec.id) { rec.id = uid("er"); rec.criadoEm = new Date().toISOString(); }
+    if (e.status && e.status !== f.status) rec.historico = (e.historico || []).concat([{ em: new Date().toISOString(), de: ESTATUS[e.status][0], para: ESTATUS[f.status][0] }]);
+    await put(rec);
+    if (f.proxRevisao && f.proxRevisao !== e.proxRevisao && !reviews().some(r => r.origemId === rec.id && r.prevista === f.proxRevisao)) {
+      await put({ id: uid("rv"), kind: "review", assunto: rec.assunto, disciplina: rec.disciplina, prevista: f.proxRevisao, motivo: "Erro: " + (rec.categoria || "registrado"), origem: "erro", origemId: rec.id, status: "pendente" });
+    }
+    closeDrawer(); toast("Erro salvo"); render();
+  };
+}
+
+/* ---------- Revisões ---------- */
+function vRevisoes() {
+  const t = TODAY(); const rs = reviews(); const st = settings();
+  const head = `<div class="page-h"><div><span class="eyebrow">Revisões</span><h1>Hora de revisar</h1><p>Crie revisões a partir de erros, conteúdos concluídos ou de qualquer assunto. Intervalos atuais: ${esc(st.intervalos)} dias.</p></div>
+    <div class="row"><button class="btn ghost" data-act="rev-config">Configurar intervalos</button><button class="btn primary" data-act="new-review">${ic("plus")}Nova revisão</button></div></div>`;
+  const today = rs.filter(r => r.status !== "concluida" && r.prevista === t);
+  const late = rs.filter(r => r.status !== "concluida" && r.prevista && r.prevista < t);
+  const fut = rs.filter(r => r.status !== "concluida" && (!r.prevista || r.prevista > t));
+  const done = rs.filter(r => r.status === "concluida").sort((a, b) => (b.concluidaEm || "").localeCompare(a.concluidaEm || "")).slice(0, 8);
+  const sug = reinforce();
+  const grp = (title, arr, emptyTxt, cls) => `<div class="card"><div class="card-h"><h2>${title}</h2><span class="chip ${cls}">${arr.length}</span></div>${arr.length ? `<div class="list">${arr.map(revItem).join("")}</div>` : `<p class="muted small">${emptyTxt}</p>`}</div>`;
+  return head + (sug.length ? `<div class="card"><div class="card-h"><div><h2>Sugestões de reforço</h2><p>Assuntos com acerto abaixo de 70% ou erros recorrentes. O cronograma não é alterado.</p></div></div>
+    <div class="list">${sug.map(s => `<div class="li"><div class="stripe warn"></div><div class="body"><b>${esc(s.assunto)}</b><p>${esc(s.disciplina)} · ${s.qr ? fmtPct(pct1(s.qc, s.qr)) + " de acerto" : "sem questões"} · ${s.erros} erro${s.erros === 1 ? "" : "s"}</p></div><button class="btn sm ghost" data-act="sug-review" data-a="${esc(s.assunto)}" data-d="${esc(s.disciplina)}">Agendar revisão</button></div>`).join("")}</div></div>` : "")
+    + `<div class="grid g3">${grp("Atrasadas", late, "Nenhuma revisão atrasada.", "bad")}${grp("Para hoje", today, "Nada previsto para hoje.", "pink")}${grp("Futuras", fut, "Nenhuma revisão agendada.", "")}</div>`
+    + (done.length ? `<div class="card"><div class="card-h"><h2>Concluídas recentemente</h2></div><div class="list">${done.map(revItem).join("")}</div></div>` : "");
+}
+function reviewForm(pre = {}) {
+  const cOpts = contents().map(x => [x.id, (x.disciplina ? x.disciplina + " · " : "") + x.assunto]);
+  const ints = settings().intervalos.split(/[,; ]+/).map(Number).filter(n => n > 0);
+  openDrawer("Nova revisão", `<form class="form" id="rvForm">
+    ${fld("A partir de um conteúdo", `<select id="rv-c">${opts(cOpts, pre.contentId || "", "Escolher conteúdo (opcional)")}</select>`, "full")}
+    ${fld("Assunto", `<input name="assunto" id="rv-a" value="${esc(pre.assunto)}">`)}
+    ${fld("Disciplina", `<input name="disciplina" id="rv-d" list="dlDisc2" value="${esc(pre.disciplina)}">`)}
+    ${fld("Motivo", `<input name="motivo" id="rv-m" value="${esc(pre.motivo || "Revisão manual")}">`)}
+    ${fld("Data prevista", `<input type="date" name="prevista" id="rv-p" value="${pre.prevista || addDays(TODAY(), ints[0] || 1)}">`)}
+    <label class="fld full toggle"><input type="checkbox" id="rv-ser"> <span>Criar série com os intervalos (${ints.join(", ")} dias a partir de hoje)</span></label>
+    <datalist id="dlDisc2">${disciplinas().map(d => `<option value="${esc(d)}">`).join("")}</datalist></form>`,
+    `<button class="btn ghost" id="rvCancel">Cancelar</button><button class="btn primary" id="rvSave">Agendar</button>`);
+  $("#rv-c").onchange = ev => { const x = get(ev.target.value); if (x) { $("#rv-a").value = x.assunto; $("#rv-d").value = x.disciplina || ""; $("#rv-m").value = "Conteúdo concluído"; } };
+  $("#rvCancel").onclick = closeDrawer;
+  $("#rvSave").onclick = async () => {
+    const f = form($("#rvForm")); const cid = $("#rv-c").value;
+    if (!f.assunto) { toast("Informe o assunto"); return; }
+    const dates = $("#rv-ser").checked ? ints.map(n => addDays(TODAY(), n)) : [f.prevista];
+    for (const d of dates) await put({ id: uid("rv"), kind: "review", assunto: f.assunto, disciplina: f.disciplina, motivo: f.motivo, prevista: d, origem: cid ? "conteudo" : (pre.origem || "manual"), origemId: cid || pre.origemId || null, status: "pendente" });
+    closeDrawer(); toast(dates.length > 1 ? dates.length + " revisões agendadas" : "Revisão agendada"); render();
+  };
+}
+function reviewDone(r) {
+  const ro = r.status === "concluida";
+  openDrawer(ro ? "Revisão concluída" : "Concluir revisão", `<div class="sect"><h3>${esc(r.assunto)}</h3><p class="muted small">${esc(r.disciplina || "")} · ${esc(r.motivo || "")} · prevista ${fmtDY(r.prevista)}</p></div>
+    <form class="form" id="rdForm">
+      ${fld("Resultado", `<select name="resultado" id="rd-r">${opts(["Domino o assunto", "Ainda tenho dúvidas", "Preciso reestudar"], r.resultado || "")}</select>`, "full")}
+      ${fld("Dificuldades encontradas", `<textarea name="dificuldades" id="rd-d">${esc(r.dificuldades)}</textarea>`, "full")}
+      ${fld("Nova revisão em", `<input type="date" name="nova" id="rd-n" value="">`, "", "Deixe vazio se não precisar")}
+    </form>`, `<button class="btn danger" id="rdDel">${ic("trash")}</button><span style="flex:1"></span><button class="btn ghost" id="rdCancel">Cancelar</button><button class="btn primary" id="rdSave">${ro ? "Salvar" : "Concluir revisão"}</button>`);
+  $("#rdCancel").onclick = closeDrawer;
+  $("#rdDel").onclick = async () => { if (await confirmBox("Excluir esta revisão?", "Ela sai da lista de revisões.")) { await del(r.id); closeDrawer(); render(); } };
+  $("#rdSave").onclick = async () => {
+    const f = form($("#rdForm"));
+    await put(Object.assign({}, r, { resultado: f.resultado, dificuldades: f.dificuldades, status: "concluida", concluidaEm: r.concluidaEm || TODAY() }));
+    if (f.nova) await put({ id: uid("rv"), kind: "review", assunto: r.assunto, disciplina: r.disciplina, motivo: "Nova revisão após " + fmtD(TODAY()), prevista: f.nova, origem: "revisao", origemId: r.id, status: "pendente" });
+    closeDrawer(); toast("Revisão registrada"); render();
+  };
+}
+
+/* ---------- Desempenho ---------- */
+let pf = { week: "", disc: "", q: "" };
+function vDesempenho() {
+  const head = `<div class="page-h"><div><span class="eyebrow">Desempenho por disciplina</span><h1>Questões e acertos</h1><p>Percentual de acertos = corretas ÷ resolvidas × 100. Não se confunde com o percentual de conclusão do cronograma.</p></div></div>`;
+  let cs = contents().filter(c => +c.qResolvidas > 0);
+  if (!cs.length) return head + `<div class="card">${empty("perf", "Sem questões registradas", "Abra um conteúdo e informe quantas questões resolveu e quantas acertou. O desempenho aparece aqui por disciplina e assunto.")}</div>`;
+  const filt = `<div class="filters"><select id="pfWeek">${opts(weeks().map(w => [w.id, w.nome]), pf.week, "Todas as semanas")}</select><select id="pfDisc">${opts(disciplinas(), pf.disc, "Todas as disciplinas")}</select><input id="pfQ" placeholder="Buscar assunto" value="${esc(pf.q)}"></div>`;
+  cs = cs.filter(c => (!pf.week || c.weekId === pf.week) && (!pf.disc || c.disciplina === pf.disc) && (!pf.q || (c.assunto || "").toLowerCase().includes(pf.q.toLowerCase())));
+  const discs = [...new Set(cs.map(c => c.disciplina || "—"))].map(d => { const x = cs.filter(c => (c.disciplina || "—") === d); const qr = x.reduce((a, c) => a + +c.qResolvidas, 0), qc = x.reduce((a, c) => a + (+c.qCorretas || 0), 0); return { d, qr, qc, acc: pct1(qc, qr), n: x.length }; }).sort((a, b) => (a.acc ?? 0) - (b.acc ?? 0));
+  const tot = discs.reduce((a, d) => ({ qr: a.qr + d.qr, qc: a.qc + d.qc }), { qr: 0, qc: 0 });
+  const att = cs.map(c => ({ c, acc: pct1(+c.qCorretas || 0, +c.qResolvidas) })).filter(x => x.acc < 70).sort((a, b) => a.acc - b.acc).slice(0, 6);
+  return head + filt + `<div class="kpis"><div class="kpi"><label>Resolvidas</label><b class="num">${tot.qr}</b></div><div class="kpi"><label>Corretas</label><b class="num">${tot.qc}</b></div><div class="kpi"><label>Erradas</label><b class="num">${tot.qr - tot.qc}</b></div><div class="kpi"><label>Acertos</label><b class="num">${fmtPct(pct1(tot.qc, tot.qr))}</b></div></div>
+    <div class="grid g2"><div class="card"><div class="card-h"><h2>Por disciplina</h2></div><div class="tbl-wrap"><table><thead><tr><th>Disciplina</th><th class="n">Resolvidas</th><th class="n">Corretas</th><th class="n">Acertos</th></tr></thead><tbody>
+      ${discs.map(d => `<tr><td>${esc(d.d)}</td><td class="n">${d.qr}</td><td class="n">${d.qc}</td><td class="n"><span class="chip ${d.acc >= 80 ? "ok" : d.acc >= 70 ? "and" : "bad"}">${fmtPct(d.acc)}</span></td></tr>`).join("")}</tbody></table></div></div>
+    <div class="card"><div class="card-h"><h2>Merecem atenção</h2><p>abaixo de 70%</p></div>${att.length ? `<div class="list">${att.map(x => `<div class="li"><div class="stripe bad"></div><div class="body"><b>${esc(x.c.assunto)}</b><p>${esc(x.c.disciplina)} · ${x.c.qCorretas || 0}/${x.c.qResolvidas} · ${fmtPct(x.acc)}</p></div><button class="btn sm ghost" data-act="open-content" data-id="${x.c.id}">Abrir</button></div>`).join("")}</div>` : `<p class="muted small">Todos os assuntos filtrados estão com 70% ou mais.</p>`}</div></div>
+    <div class="card"><div class="card-h"><h2>Por assunto</h2></div><div class="tbl-wrap"><table><thead><tr><th>Assunto</th><th>Disciplina</th><th>Semana</th><th class="n">Resolvidas</th><th class="n">Corretas</th><th class="n">Acertos</th></tr></thead><tbody>
+      ${cs.map(c => { const a = pct1(+c.qCorretas || 0, +c.qResolvidas); const w = get(c.weekId); return `<tr><td>${esc(c.assunto)}</td><td>${esc(c.disciplina)}</td><td>${esc(w ? w.nome : "")}</td><td class="n">${c.qResolvidas}</td><td class="n">${c.qCorretas || 0}</td><td class="n">${fmtPct(a)}</td></tr>`; }).join("")}</tbody></table></div></div>`;
+}
+
+/* ---------- Horas líquidas ---------- */
+let hDay = TODAY();
+function vHoras() {
+  const st = settings(); const meta = +st.metaDiaria || 0;
+  const day = sessions().filter(s => s.data === hDay);
+  const tot = day.reduce((a, s) => a + sessionMin(s), 0);
+  const w = weekOfDate(hDay);
+  const wTot = w ? sessions().filter(s => sessionWeek(s) === w.id).reduce((a, s) => a + sessionMin(s), 0) : null;
+  const last7 = [...Array(7)].map((_, i) => addDays(hDay, i - 6));
+  return `<div class="page-h"><div><span class="eyebrow">Horas líquidas</span><h1>Controle de tempo</h1><p>Cada bloco desconta pausas e, se marcado, o almoço de ${st.almocoMin} min. Quem registra o almoço como pausa não marca o desconto, para não contar duas vezes.</p></div>
+    <div class="row"><input type="date" class="inp" id="hDay" value="${hDay}" style="width:auto"><button class="btn primary" data-act="new-session">${ic("plus")}Novo bloco</button></div></div>
+    <div class="kpis"><div class="kpi lead"><label>Realizado em ${fmtDY(hDay)}</label><b class="num">${hm(tot)}</b><small>meta diária ${hm(meta)}</small>${bar(meta ? tot / meta * 100 : 0)}</div>
+      <div class="kpi"><label>Saldo do dia</label><b class="num" style="color:${tot - meta >= 0 ? "var(--ok)" : "var(--bad)"}">${hm(tot - meta)}</b><small>${tot >= meta ? "meta batida" : "para a meta"}</small></div>
+      <div class="kpi"><label>Total da semana</label><b class="num">${wTot == null ? "—" : hm(wTot)}</b><small>${w ? esc(w.nome) + (w.metaHoras ? " · meta " + w.metaHoras + "h" : "") : "data fora das semanas"}</small></div>
+      <div class="kpi"><label>Meta diária</label><b class="num">${hm(meta)}</b><small><button class="btn sm ghost" data-act="hours-config" style="margin-top:4px">Ajustar</button></small></div></div>
+    <div class="grid g2"><div class="card"><div class="card-h"><h2>Blocos do dia</h2></div>
+      ${day.length ? `<div class="tbl-wrap"><table><thead><tr><th>Horário</th><th>Assunto</th><th class="n">Pausas</th><th class="n">Líquido</th><th></th></tr></thead><tbody>${day.map(s => { const c = get(s.contentId); return `<tr><td class="num">${s.inicio && s.fim ? s.inicio + "–" + s.fim : "manual"}${s.almoco ? ' <span class="chip">almoço</span>' : ""}</td><td>${esc(c ? c.assunto : s.disciplina || "—")}</td><td class="n">${s.pausasMin || 0}m</td><td class="n"><b>${hm(sessionMin(s))}</b></td><td><button class="icon-btn" data-act="edit-session" data-id="${s.id}" aria-label="Editar">${ic("edit")}</button></td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted small">Nenhum bloco neste dia. Registre início e término do estudo.</p>`}</div>
+    <div class="card"><div class="card-h"><h2>Últimos 7 dias</h2><p>traço = meta diária</p></div>${barChart(last7.map(fmtD), last7.map(d => sessions().filter(s => s.data === d).reduce((a, s) => a + sessionMin(s), 0) / 60), { fmt: v => (Math.round(v * 10) / 10) + "h", target: last7.map(() => meta / 60) })}</div></div>`;
+}
+function sessionForm(s = {}, ctx = {}) {
+  const isNew = !s.id;
+  const cOpts = contents().map(x => [x.id, (x.disciplina ? x.disciplina + " · " : "") + x.assunto]);
+  const st = settings();
+  openDrawer(isNew ? "Registrar bloco de estudo" : "Editar bloco", `<form class="form" id="sForm">
+    ${fld("Data", `<input type="date" name="data" id="s-d" value="${s.data || (route === "horas" ? hDay : TODAY())}">`)}
+    ${fld("Conteúdo", `<select name="contentId" id="s-c">${opts(cOpts, s.contentId || ctx.contentId || "", "Sem conteúdo específico")}</select>`)}
+    ${fld("Disciplina (se não houver conteúdo)", `<input name="disciplina" id="s-di" list="dlDisc3" value="${esc(s.disciplina)}">`, "full")}
+    ${fld("Início", `<input type="time" name="inicio" id="s-i" value="${s.inicio || ""}">`)}
+    ${fld("Término", `<input type="time" name="fim" id="s-f" value="${s.fim || ""}">`)}
+    ${fld("Pausas adicionais (min)", `<input type="number" min="0" inputmode="numeric" name="pausasMin" id="s-p" value="${s.pausasMin || ""}">`)}
+    <label class="fld toggle" style="align-self:end;min-height:42px"><input type="checkbox" name="almoco" id="s-al" ${(isNew ? st.almocoPadrao : s.almoco) ? "checked" : ""}><span>Descontar almoço (${st.almocoMin} min)</span></label>
+    ${fld("Ou informe o tempo líquido direto (min)", `<input type="number" min="0" inputmode="numeric" name="minutosManuais" id="s-m" value="${s.minutosManuais ?? ""}">`, "full", "Use para corrigir manualmente. Se preenchido, substitui o cálculo por horário.")}
+    <div class="full banner" id="s-prev"></div>
+    <datalist id="dlDisc3">${disciplinas().map(d => `<option value="${esc(d)}">`).join("")}</datalist></form>`,
+    `${!isNew ? `<button class="btn danger" id="sDel">${ic("trash")}</button><span style="flex:1"></span>` : ""}<button class="btn ghost" id="sCancel">Cancelar</button><button class="btn primary" id="sSave">Salvar bloco</button>`);
+  const upd = () => { const f = form($("#sForm")); const m = sessionMin(f); $("#s-prev").innerHTML = `Tempo líquido deste bloco: <b class="num">${hm(m)}</b>${f.almoco && +f.pausasMin >= 60 ? '<span class="small" style="color:var(--warn)">Você já tem pausa de 60 min ou mais. Se ela é o almoço, desmarque o desconto.</span>' : ""}`; };
+  $("#sForm").addEventListener("input", upd); upd();
+  $("#sCancel").onclick = closeDrawer;
+  if (!isNew) $("#sDel").onclick = async () => { if (await confirmBox("Excluir este bloco?", "As horas dele saem dos totais do dia e da semana.")) { await del(s.id); closeDrawer(); render(); } };
+  $("#sSave").onclick = async () => {
+    const f = form($("#sForm"));
+    if (!f.minutosManuais && !(f.inicio && f.fim)) { toast("Informe início e término, ou o tempo líquido"); return; }
+    const rec = Object.assign({}, s, f, { kind: "session", id: s.id || uid("ss") });
+    rec.minutosManuais = f.minutosManuais === "" ? null : +f.minutosManuais;
+    rec.pausasMin = +f.pausasMin || 0;
+    if (rec.contentId && get(rec.contentId)) rec.disciplina = get(rec.contentId).disciplina;
+    await put(rec); closeDrawer(); toast("Bloco salvo · " + hm(sessionMin(rec))); render();
+  };
+}
+
+/* ---------- Biblioteca ---------- */
+let lf = { disc: "", week: "", q: "" };
+const matLabel = m => m.arquivo ? ((m.nome || "").split(".").pop() || "ARQ").slice(0, 4).toUpperCase() : ({ "Google Docs": "DOC", "Google Sheets": "XLS", "Google Drive": "DRV", "Vídeo": "VID", "PDF online": "PDF" }[m.tipo] || "URL");
+function matItem(m) {
+  const c = get(m.contentId); const web = /^https?:\/\//.test(m.url || "");
+  const ctx = c ? " · " + esc(c.assunto) : m.data ? " · dia " + fmtD(m.data) : m.weekId && get(m.weekId) ? " · " + esc(get(m.weekId).nome) : "";
+  return `<div class="mat"><div class="ico">${esc(web ? matLabel(m) : "PC")}</div><div class="info"><b title="${esc(m.nome)}">${esc(m.nome || "Material")}</b><small>${esc(m.tipo || (m.arquivo ? "Arquivo" : "Link"))}${ctx}${m.tamanho ? " · " + Math.round(m.tamanho / 1024) + " KB" : ""}</small>${web ? "" : `<small style="display:block;color:var(--warn)">Endereço de arquivo no seu computador: não abre pela web. Anexe o arquivo a um conteúdo ou suba para o Drive.</small>`}</div>
+    ${web ? `<a class="btn sm primary" href="${esc(m.url)}" target="_blank" rel="noopener">${ic("ext")}Abrir material</a>` : ""}
+    ${m.arquivo ? `<button class="icon-btn" data-act="dl-mat" data-id="${m.id}" aria-label="Baixar">${ic("dl")}</button>` : ""}</div>`;
+}
+function vBiblioteca() {
+  const head = `<div class="page-h"><div><span class="eyebrow">Biblioteca de materiais</span><h1>Seus materiais</h1><p>Links e arquivos vinculados aos conteúdos. Para adicionar, abra um conteúdo e use a área “Material de estudo”.</p></div></div>`;
+  const ms = materials();
+  if (!ms.length) return head + `<div class="card">${empty("lib", "Nenhum material ainda", "Vincule um Google Docs, Sheets ou outro link, ou anexe um PDF a qualquer conteúdo do cronograma.", contents().length ? `<button class="btn primary" data-go="semanas">Ir para as semanas</button>` : "")}</div>`;
+  const list = ms.filter(m => { const c = get(m.contentId) || {}; return (!lf.disc || c.disciplina === lf.disc) && (!lf.week || (c.weekId || m.weekId) === lf.week) && (!lf.q || ((m.nome || "") + " " + (c.assunto || "")).toLowerCase().includes(lf.q.toLowerCase())); });
+  const gk = m => { const c = get(m.contentId); if (c) return c.disciplina || "Sem disciplina"; if (m.geral) return "Links úteis"; if (m.weekId && get(m.weekId)) return "Apoio · " + get(m.weekId).nome; return "Sem vínculo"; };
+  const groups = {}; list.sort((a, b) => (b.geral ? 1 : 0) - (a.geral ? 1 : 0)).forEach(m => (groups[gk(m)] = groups[gk(m)] || []).push(m));
+  return head + `<div class="filters"><select id="lfDisc">${opts(disciplinas(), lf.disc, "Todas as disciplinas")}</select><select id="lfWeek">${opts(weeks().map(w => [w.id, w.nome]), lf.week, "Todas as semanas")}</select><input id="lfQ" placeholder="Buscar por nome ou assunto" value="${esc(lf.q)}"></div>`
+    + (Object.entries(groups).map(([d, arr]) => `<div class="card"><div class="card-h"><h2>${esc(d)}</h2><span class="chip">${arr.length}</span></div><div class="list">${arr.map(matItem).join("")}</div></div>`).join("") || `<div class="card"><p class="muted">Nenhum material com esses filtros.</p></div>`);
+}
+
+/* ---------- Fechamentos / histórico ---------- */
+function vFechamentos() {
+  const ws = weeks();
+  const head = `<div class="page-h"><div><span class="eyebrow">Fechamentos semanais</span><h1>Histórico das semanas</h1><p>Cada métrica aparece separada. Mais horas não significam, sozinhas, melhor desempenho.</p></div></div>`;
+  if (!ws.length) return head + `<div class="card">${empty("close", "Sem semanas para comparar", "O histórico aparece quando houver semanas com registros.")}</div>`;
+  const st = ws.map(w => ({ w, s: weekStats(w.id), c: closingOf(w.id) }));
+  const lbl = ws.map((w, i) => "S" + (i + 1));
+  const revSubj = bySubject().filter(s => s.revisoes).sort((a, b) => b.revisoes - a.revisoes).slice(0, 6);
+  const maxR = Math.max(1, ...revSubj.map(r => r.revisoes));
+  return head + `<div class="grid g2">
+    <div class="card"><div class="card-h"><h2>Meta × realizado (h)</h2></div>${barChart(lbl, st.map(x => x.s.min / 60), { fmt: v => Math.round(v) + "h", target: st.map(x => x.s.meta / 60) })}</div>
+    <div class="card"><div class="card-h"><h2>Acertos por semana</h2></div>${lineChart(lbl, st.map(x => x.s.acc))}</div>
+    <div class="card"><div class="card-h"><h2>Questões resolvidas</h2></div>${barChart(lbl, st.map(x => x.s.qr), { fmt: v => Math.round(v) })}</div>
+    <div class="card"><div class="card-h"><h2>Assuntos com mais revisões</h2></div>${revSubj.length ? hbars(revSubj.map(r => ({ l: r.assunto, p: r.revisoes / maxR * 100, v: r.revisoes }))) : `<p class="muted small">Ainda sem revisões registradas.</p>`}</div></div>
+    <div class="card"><div class="card-h"><h2>Resumo por semana</h2></div><div class="tbl-wrap"><table><thead><tr><th>Semana</th><th>Período</th><th class="n">Horas</th><th class="n">Meta</th><th class="n">% meta</th><th class="n">Questões</th><th class="n">Acertos</th><th class="n">Concluídos</th><th>Fechamento</th></tr></thead><tbody>
+    ${st.map(({ w, s, c }) => `<tr><td><button class="btn sm ghost" data-go="semanas" data-week="${w.id}">${esc(w.nome)}</button></td><td class="num small">${w.inicio ? fmtD(w.inicio) + "–" + fmtD(w.fim) : "—"}</td><td class="n">${hm(s.min)}</td><td class="n">${s.meta ? hm(s.meta) : "—"}</td><td class="n">${s.meta ? Math.round(s.min / s.meta * 100) + "%" : "—"}</td><td class="n">${s.qr}</td><td class="n">${fmtPct(s.acc)}</td><td class="n">${s.done}/${s.total}</td><td>${c && c.finalizadaEm ? `<button class="chip ok" style="border:0;cursor:pointer" data-act="week-summary" data-id="${w.id}"><i></i>Ver resumo</button>` : `<span class="chip">Aberto</span>`}</td></tr>`).join("")}
+    </tbody></table></div></div>`;
+}
+
+/* ================= formulários de semana e conteúdo ================= */
+function weekForm(w = {}) {
+  const isNew = !w.id; const ws = weeks(); const last = ws[ws.length - 1];
+  const ini = w.inicio || (last && last.fim ? addDays(last.fim, 1) : TODAY());
+  openDrawer(isNew ? "Nova semana" : "Editar semana", `<form class="form" id="wForm">
+    ${fld("Nome da semana", `<input name="nome" id="w-n" value="${esc(w.nome || "Semana " + (ws.length + 1))}">`, "full")}
+    ${fld("Início", `<input type="date" name="inicio" id="w-i" value="${ini}">`)}
+    ${fld("Fim", `<input type="date" name="fim" id="w-f" value="${w.fim || addDays(ini, 6)}">`)}
+    ${fld("Meta de horas líquidas da semana", `<input type="number" min="0" step="0.5" inputmode="decimal" name="metaHoras" id="w-m" value="${w.metaHoras ?? ""}">`, "full")}
+  </form>`, `${!isNew ? `<button class="btn danger" id="wDel">${ic("trash")}Excluir</button><span style="flex:1"></span>` : ""}<button class="btn ghost" id="wCancel">Cancelar</button><button class="btn primary" id="wSave">Salvar semana</button>`);
+  $("#wCancel").onclick = closeDrawer;
+  if (!isNew) $("#wDel").onclick = async () => {
+    const n = contentsOf(w.id).length;
+    if (n) { toast(`Mova ou exclua os ${n} conteúdos antes de excluir a semana`); return; }
+    if (await confirmBox("Excluir semana?", "A semana e seu fechamento serão apagados.")) { const c = closingOf(w.id); if (c) await del(c.id); await del(w.id); selWeek = null; closeDrawer(); render(); }
+  };
+  $("#wSave").onclick = async () => {
+    const f = form($("#wForm")); if (!f.nome) { toast("Dê um nome à semana"); return; }
+    const rec = Object.assign({}, w, f, { kind: "week", id: w.id || uid("wk"), ordem: w.ordem ?? ((last ? last.ordem ?? ws.length : 0) + 1), metaHoras: f.metaHoras === "" ? null : +f.metaHoras });
+    await put(rec); selWeek = rec.id; closeDrawer(); toast("Semana salva"); if (isNew && route !== "semanas" && route !== "crono") go("semanas", { week: rec.id }); else render();
+  };
+}
+function contentForm(c = {}, ctx = {}) {
+  const isNew = !c.id;
+  const ws = weeks();
+  if (!ws.length) { toast("Crie uma semana primeiro"); weekForm(); return; }
+  const id = c.id;
+  const mats = id ? materials().filter(m => m.contentId === id) : [];
+  const ss = id ? sessions().filter(s => s.contentId === id) : [];
+  const ers = id ? errors().filter(e => e.contentId === id) : [];
+  const acc = pct1(+c.qCorretas || 0, +c.qResolvidas || 0);
+  openDrawer(isNew ? "Novo conteúdo" : (c.assunto || "Conteúdo"), `<form class="form" id="cForm">
+    ${fld("Disciplina", `<input name="disciplina" id="c-d" list="dlDisc4" value="${esc(c.disciplina)}">`)}
+    ${fld("Semana", `<select name="weekId" id="c-w">${opts(ws.map(w => [w.id, w.nome]), c.weekId || ctx.week || selWeek || ws[0].id)}</select>`)}
+    ${fld("Assunto", `<input name="assunto" id="c-a" value="${esc(c.assunto)}">`, "full")}
+    ${fld("Status", `<select name="status" id="c-s">${opts(Object.entries(STATUS).map(([k, v]) => [k, v[0]]), c.status || "pendente")}</select>`)}
+    ${fld("Data prevista", `<input type="date" name="prevista" id="c-p" value="${c.prevista || ""}">`)}
+    ${fld("Questões resolvidas", `<input type="number" min="0" inputmode="numeric" name="qResolvidas" id="c-qr" value="${c.qResolvidas ?? ""}">`)}
+    ${fld("Questões corretas", `<input type="number" min="0" inputmode="numeric" name="qCorretas" id="c-qc" value="${c.qCorretas ?? ""}">`, "", `Acertos: <b id="c-acc">${fmtPct(acc)}</b>`)}
+    ${fld("Data de conclusão", `<input type="date" name="concluidaEm" id="c-ce" value="${c.concluidaEm || ""}">`, "", "Preenchida ao marcar o check")}
+    <label class="fld toggle" style="align-self:end;min-height:42px"><input type="checkbox" name="revisar" id="c-rv" ${c.revisar ? "checked" : ""}><span>Precisa de revisão</span></label>
+    ${fld("Observações pessoais", `<textarea name="obs" id="c-o">${esc(c.obs)}</textarea>`, "full")}
+    <datalist id="dlDisc4">${disciplinas().map(d => `<option value="${esc(d)}">`).join("")}</datalist>
+  </form>
+  ${isNew ? `<p class="muted small">Salve o conteúdo para vincular materiais, horas e erros.</p>` : `
+  <div class="sect"><h3>${ic("clip")}Material de estudo</h3>
+    ${mats.length ? `<div class="list">${mats.map(m => matItem(m).replace("</div></div>", "").replace(/<\/div>$/, "") + `<button class="icon-btn" data-act="del-mat" data-id="${m.id}" aria-label="Remover">${ic("trash")}</button></div>`).join("")}</div>` : `<p class="muted small">Nenhum material vinculado.</p>`}
+    <div class="card" style="background:var(--field);box-shadow:none;padding:14px"><div class="form" id="linkForm">
+      ${fld("Nome do material", `<input id="l-n" placeholder="Ex.: Resumo de crase">`)}
+      ${fld("Tipo", `<select id="l-t">${opts(["Google Docs", "Google Sheets", "Google Drive", "PDF online", "Vídeo", "Site", "Outro"], "")}</select>`)}
+      ${fld("Link (URL)", `<input id="l-u" type="url" inputmode="url" placeholder="https://docs.google.com/…">`, "full", "Documentos privados do Google só abrem para quem tem permissão.")}
+      <div class="full row"><button type="button" class="btn sm primary" id="lAdd">${ic("link")}Vincular link</button><span style="flex:1"></span>
+      ${S.assets ? `<button type="button" class="btn sm ghost" id="fAdd">${ic("upload")}Anexar arquivo</button>` : `<span class="small muted">${S.mode === "db" ? "Anexos disponíveis só para quem edita a página" : "Anexos ficam disponíveis na página publicada"}</span>`}</div>
+    </div></div>
+  </div>
+  <div class="sect"><h3>${ic("clock")}Tempo líquido · ${hm(contentMin(id))}</h3>
+    ${ss.length ? ss.map(s => `<div class="row small"><span class="num">${fmtD(s.data)}</span><span class="muted">${s.inicio && s.fim ? s.inicio + "–" + s.fim : "manual"}</span><b class="num" style="margin-left:auto">${hm(sessionMin(s))}</b><button class="icon-btn" data-act="edit-session" data-id="${s.id}" aria-label="Editar">${ic("edit")}</button></div>`).join("") : `<p class="muted small">Nenhum bloco de estudo ligado a este conteúdo.</p>`}
+    <div><button class="btn sm ghost" data-act="new-session" data-content="${id}">${ic("plus")}Registrar tempo</button></div>
+  </div>
+  <div class="sect"><h3>${ic("err")}Erros neste assunto · ${ers.length}</h3>
+    ${ers.length ? `<div class="list">${ers.map(errItem).join("")}</div>` : ""}
+    <div class="row"><button class="btn sm ghost" data-act="new-error" data-content="${id}">${ic("plus")}Registrar erro</button><button class="btn sm ghost" data-act="new-review" data-content="${id}">${ic("rev")}Gerar revisão</button></div>
+  </div>`}`,
+    `${!isNew ? `<button class="btn danger" id="cDel">${ic("trash")}Excluir</button><span style="flex:1"></span>` : ""}<button class="btn ghost" id="cCancel">Cancelar</button><button class="btn primary" id="cSave">Salvar</button>`);
+  const upAcc = () => { const r = +$("#c-qr").value || 0, k = +$("#c-qc").value || 0; $("#c-acc").textContent = fmtPct(pct1(k, r)); $("#c-qc").setCustomValidity(k > r ? "Corretas não pode passar de resolvidas" : ""); };
+  $("#c-qr").oninput = upAcc; $("#c-qc").oninput = upAcc;
+  $("#cCancel").onclick = closeDrawer;
+  $("#cSave").onclick = async () => {
+    const f = form($("#cForm"));
+    if (!f.assunto) { toast("Informe o nome do assunto"); return; }
+    if (+f.qCorretas > +f.qResolvidas) { toast("Corretas não pode ser maior que resolvidas"); return; }
+    const rec = Object.assign({}, c, f, { kind: "content", id: c.id || uid("ct") });
+    rec.qResolvidas = f.qResolvidas === "" ? null : +f.qResolvidas; rec.qCorretas = f.qCorretas === "" ? null : +f.qCorretas;
+    if (rec.status === "concluido" && !rec.concluidaEm) rec.concluidaEm = TODAY();
+    if (rec.status !== "concluido") rec.concluidaEm = f.concluidaEm && c.status === "concluido" ? "" : f.concluidaEm;
+    if (isNew) rec.ordem = contentsOf(rec.weekId).length + 1;
+    await put(rec); toast("Conteúdo salvo");
+    if (isNew) contentForm(rec); else { closeDrawer(); render(); }
+  };
+  if (!isNew) {
+    $("#cDel").onclick = async () => {
+      const linked = mats.length + ss.length + ers.length;
+      if (await confirmBox("Excluir este conteúdo?", linked ? `Ele tem ${mats.length} materiais, ${ss.length} blocos de tempo e ${ers.length} erros. Materiais e blocos serão desvinculados e mantidos como registros soltos; os erros continuam no caderno.` : "O conteúdo sai do cronograma.")) {
+        for (const m of mats) await put(Object.assign({}, m, { contentId: null }));
+        for (const s of ss) await put(Object.assign({}, s, { contentId: null, disciplina: c.disciplina }));
+        for (const e of ers) await put(Object.assign({}, e, { contentId: null }));
+        await del(c.id); closeDrawer(); toast("Conteúdo excluído"); render();
+      }
+    };
+    $("#lAdd").onclick = async () => {
+      const u = $("#l-u").value.trim(); let ok = false;
+      try { const x = new URL(u); ok = x.protocol === "https:" || x.protocol === "http:"; } catch (e) { }
+      if (!ok) { toast("Link inválido. Cole o endereço completo, começando com https://"); $("#l-u").focus(); return; }
+      let tipo = $("#l-t").value;
+      if (/docs\.google\.com\/document/.test(u)) tipo = "Google Docs"; else if (/docs\.google\.com\/spreadsheets/.test(u)) tipo = "Google Sheets"; else if (/drive\.google\.com/.test(u)) tipo = "Google Drive";
+      await put({ id: uid("mt"), kind: "material", contentId: id, nome: $("#l-n").value.trim() || tipo, url: u, tipo, arquivo: false });
+      toast("Material vinculado"); contentForm(get(id));
+    };
+    const fa = $("#fAdd"); if (fa) fa.onclick = () => { $("#fileIn").onchange = ev => uploadFile(ev.target.files[0], id); $("#fileIn").value = ""; $("#fileIn").click(); };
+  }
+}
+async function uploadFile(file, cid, replaceId) {
+  if (!file || !S.assets) return;
+  toast("Enviando " + file.name + "…");
+  try {
+    const r = await S.assets.upload(file);
+    const old = replaceId ? get(replaceId) : null;
+    await put({ id: replaceId || uid("mt"), kind: "material", contentId: cid, nome: file.name, url: r.url, assetId: r.id, tipo: "Arquivo " + (file.name.split(".").pop() || "").toUpperCase(), contentType: r.contentType, tamanho: r.sizeBytes, arquivo: true });
+    if (old && old.assetId) { try { await S.assets.delete(old.assetId); } catch (e) { } }
+    toast("Arquivo anexado"); contentForm(get(cid));
+  } catch (e) {
+    const m = { unsupported_type: "Esse tipo de arquivo não pode ser guardado aqui. Envie em PDF ou vincule pelo Google Drive.", too_large: "Arquivo acima de 20 MB. Envie uma versão menor ou vincule pelo Drive.", not_uploader: "Só quem edita a página pode anexar arquivos.", quota_or_state: "Espaço de anexos cheio. Remova arquivos antigos." }[e && e.code];
+    toast(m || "Não consegui enviar o arquivo. Tente de novo.");
+  }
+}
+
+/* ================= importação de planilha ================= */
+function importFlow() {
+  openDrawer("Importar planilha", `<div class="sect"><p>Envie a planilha de acompanhamento (.xlsx ou .csv). Cada aba vira uma semana e as linhas com disciplina e assunto viram conteúdos. Você confere tudo antes de importar, e a planilha original não é alterada.</p>
+    <div><button class="btn primary" id="pickX">${ic("upload")}Escolher arquivo</button></div><div id="impOut"></div></div>`, "");
+  $("#pickX").onclick = () => { $("#xlsIn").value = ""; $("#xlsIn").click(); };
+  $("#xlsIn").onchange = async ev => {
+    const f = ev.target.files[0]; if (!f) return;
+    if (!window.XLSX) { $("#impOut").innerHTML = `<p class="err">O leitor de planilhas não carregou. Atualize a página e tente de novo.</p>`; return; }
+    const wb = XLSX.read(await f.arrayBuffer(), { type: "array", cellDates: true });
+    const found = []; const issues = [];
+    const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+    wb.SheetNames.forEach(name => {
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: "" });
+      let hi = rows.findIndex(r => r.some(c => /disciplina|materia/.test(norm(c))) && r.some(c => /assunto|conteudo|topico/.test(norm(c))));
+      if (hi < 0) { issues.push(`Aba “${name}”: não encontrei colunas de disciplina e assunto.`); return; }
+      const h = rows[hi].map(norm);
+      const col = re => h.findIndex(c => re.test(c));
+      const cD = col(/disciplina|materia/), cA = col(/assunto|conteudo|topico/), cS = col(/status|situacao|concluid/), cQ = col(/resolvid|feitas|questoes/), cC = col(/acert|corret/), cL = col(/link|material|url/), cO = col(/obs/);
+      const items = [];
+      let lastD = "";
+      for (let i = hi + 1; i < rows.length; i++) {
+        const r = rows[i]; const first = norm(r.find(x => String(x).trim()));
+        if (/fechamento/.test(first)) break;
+        const d = String(r[cD] || "").trim() || lastD, a = String(r[cA] || "").trim();
+        if (!a) continue; lastD = d;
+        const sv = cS >= 0 ? norm(r[cS]) : "";
+        items.push({ disciplina: d, assunto: a, status: /conclu|ok|sim|true|feito|x/.test(sv) ? "concluido" : /andamento/.test(sv) ? "andamento" : "pendente", qResolvidas: cQ >= 0 && r[cQ] !== "" ? +r[cQ] || null : null, qCorretas: cC >= 0 && r[cC] !== "" ? +r[cC] || null : null, link: cL >= 0 ? String(r[cL] || "").trim() : "", obs: cO >= 0 ? String(r[cO] || "") : "" });
+      }
+      if (items.length) found.push({ name, items }); else issues.push(`Aba “${name}”: cabeçalho encontrado, mas nenhuma linha de assunto.`);
+    });
+    issues.push("Hiperlinks embutidos em texto e fórmulas não são lidos; confira os links depois da importação.");
+    const total = found.reduce((a, s) => a + s.items.length, 0);
+    $("#impOut").innerHTML = `<div class="sect" style="margin-top:12px"><h3>Encontrei ${found.length} semanas e ${total} conteúdos em “${esc(f.name)}”</h3>
+      ${issues.map(i => `<p class="small muted">• ${esc(i)}</p>`).join("")}
+      ${found.map(s => `<details class="card" style="padding:12px;box-shadow:none;border:1px solid var(--line)"><summary><b>${esc(s.name)}</b> · ${s.items.length} conteúdos</summary><div class="tbl-wrap"><table><thead><tr><th>Disciplina</th><th>Assunto</th><th>Status</th><th class="n">Q</th></tr></thead><tbody>${s.items.map(x => `<tr><td>${esc(x.disciplina)}</td><td>${esc(x.assunto)}</td><td>${STATUS[x.status][0]}</td><td class="n">${x.qResolvidas ?? ""}</td></tr>`).join("")}</tbody></table></div></details>`).join("")}
+      ${total ? `<div><button class="btn primary" id="doImp">Importar ${total} conteúdos</button></div>` : ""}</div>`;
+    const b = $("#doImp"); if (b) b.onclick = async () => {
+      b.disabled = true; b.textContent = "Importando…";
+      let ord = weeks().length;
+      for (const s of found) {
+        const w = { id: uid("wk"), kind: "week", nome: s.name, ordem: ++ord, inicio: "", fim: "", metaHoras: null, importado: f.name };
+        await put(w);
+        let o = 0;
+        for (const x of s.items) {
+          const c = { id: uid("ct"), kind: "content", weekId: w.id, ordem: ++o, disciplina: x.disciplina, assunto: x.assunto, status: x.status, qResolvidas: x.qResolvidas, qCorretas: x.qCorretas, obs: x.obs, concluidaEm: x.status === "concluido" ? TODAY() : "" };
+          await put(c);
+          if (/^https?:\/\//.test(x.link)) await put({ id: uid("mt"), kind: "material", contentId: c.id, nome: "Material", url: x.link, tipo: /docs\.google\.com\/document/.test(x.link) ? "Google Docs" : /spreadsheets/.test(x.link) ? "Google Sheets" : "Site", arquivo: false });
+        }
+      }
+      closeDrawer(); toast("Importação concluída. Defina o período e a meta de cada semana."); go("crono");
+    };
+  };
+}
+
+/* ================= importação do plano da planilha ================= */
+function planFlow() {
+  const P = PLANO; const total = planCount();
+  const mats = P.semanas.flatMap(s => s.materiais.map(m => ({ ...m, semana: s.nome })));
+  const sess = P.semanas.flatMap(s => s.dias.filter(d => d.sessao).map(d => ({ ...d.sessao, data: d.data })));
+  const local = mats.filter(m => !/^https?:/.test(m.url));
+  const already = weeks().filter(w => !w.exemplo).length;
+  openDrawer("Conferir a planilha", `
+    <div class="sect"><span class="eyebrow">Planejamento_de_estudos.xlsx</span><h3 style="font-size:1.05rem">${esc(P.titulo)}</h3>
+      <p class="small muted">${esc(P.periodo)} · ${esc(P.carga)}</p><p class="small muted">${esc(P.distribuicao)}</p></div>
+    <div class="sect"><h3>${ic("weeks")}${P.semanas.length} semanas · ${total} assuntos</h3>
+      <div class="tbl-wrap"><table><thead><tr><th>Semana</th><th>Período</th><th class="n">Dias</th><th class="n">Assuntos</th><th class="n">Meta</th></tr></thead><tbody>
+      ${P.semanas.map(s => `<tr><td>${esc(s.nome)}</td><td class="num small">${fmtD(s.inicio)}–${fmtD(s.fim)}</td><td class="n">${s.dias.length}</td><td class="n">${s.dias.reduce((a, d) => a + d.itens.length, 0)}</td><td class="n">${s.metaHoras}h</td></tr>`).join("")}</tbody></table></div>
+      <p class="small muted">Cada dia vira 4 conteúdos, um por coluna: Conhecimentos Específicos, Legislação, Matéria básica e Questões / revisão. Textos copiados sem alteração. Status importado: Pendente. Meta da semana: 8h por dia de estudo.</p>
+      <details><summary class="small" style="cursor:pointer;color:var(--pink-ink);font-weight:600">Ver todos os assuntos</summary>${P.semanas.map(s => `<p class="small" style="margin-top:10px"><b>${esc(s.nome)}</b></p>${s.dias.map(d => `<p class="small muted" style="margin-top:4px"><b>${esc(d.dia)} ${fmtD(d.data)}</b></p>${d.itens.map(i => `<p class="small">· <span class="muted">${esc(i.disciplina)}:</span> ${esc(i.assunto)}</p>`).join("")}`).join("")}`).join("")}</details></div>
+    <div class="sect"><h3>${ic("clock")}Horas já registradas</h3>${sess.map(x => `<p class="small">${fmtDY(x.data)} · ${x.inicio} às ${x.fim}, menos 1h de almoço como na fórmula da planilha = <b>${hm(sessionMin({ inicio: x.inicio, fim: x.fim, almoco: true }))}</b></p>`).join("") || `<p class="small muted">Nenhuma.</p>`}</div>
+    <div class="sect"><h3>${ic("link")}Materiais e links</h3>
+      ${mats.map(m => `<p class="small">${esc(m.semana)}${m.data ? " · " + fmtD(m.data) : ""} · ${esc(m.coluna)}: <span class="muted" style="word-break:break-all">${esc(m.url)}</span></p>`).join("")}
+      <p class="small">Links úteis da aba Apoio: ${P.links.map(l => esc(l.nome)).join(", ")}.</p></div>
+    <div class="sect"><h3>${ic("flag")}Pontos de atenção</h3>
+      ${local.map(m => `<p class="small">• O link de ${esc(m.coluna)} em ${fmtD(m.data)} aponta para um arquivo no seu computador (file:///…). Ele será guardado, mas não abre pela web. Para abrir em qualquer dispositivo, anexe o arquivo ao conteúdo ou suba para o Drive.</p>`).join("")}
+      <p class="small">• As seções “Principais erros” e “Fechamento” estão vazias na planilha; o caderno de erros e os fechamentos começam em branco.</p>
+      <p class="small">• A Semana 1 não tem coluna Status; os assuntos dela entram como Pendente.</p>
+      ${hasExample() ? `<p class="small">• Os dados de exemplo serão apagados antes da importação.</p>` : ""}
+      ${already ? `<p class="small" style="color:var(--bad)">• Você já tem ${already} semanas cadastradas. A importação adiciona as semanas da planilha depois delas.</p>` : ""}</div>`,
+    `<button class="btn ghost" id="plC">Agora não</button><button class="btn primary" id="plGo">Importar ${total} assuntos</button>`);
+  let planDocs = null;
+  $("#plC").onclick = closeDrawer;
+  $("#plGo").onclick = async () => {
+    const b = $("#plGo"); b.disabled = true; $("#plC").disabled = true;
+    try {
+      for (const d of [...S.docs.values()].filter(x => x.exemplo)) await del(d.id);
+      if (!planDocs) {
+      const docs = planDocs = [];
+      let ord = weeks().reduce((a, w) => Math.max(a, w.ordem || 0), 0);
+      P.semanas.forEach(s => {
+        const w = { id: uid("wk"), kind: "week", nome: s.nome, titulo: s.titulo, ordem: ++ord, inicio: s.inicio, fim: s.fim, metaHoras: s.metaHoras, origem: "planilha" };
+        docs.push(w);
+        s.dias.forEach((d, di) => d.itens.forEach((it, ii) => docs.push({ id: uid("ct"), kind: "content", weekId: w.id, ordem: di * 10 + ii + 1, disciplina: it.disciplina, assunto: it.assunto, status: "pendente", prevista: d.data, dia: d.dia, planejadoMin: it.planejadoMin, concluidaEm: "", qResolvidas: null, qCorretas: null, obs: "", revisar: false, origem: "planilha" })));
+        s.dias.filter(d => d.sessao).forEach(d => docs.push({ id: uid("ss"), kind: "session", data: d.data, inicio: d.sessao.inicio, fim: d.sessao.fim, pausasMin: 0, almoco: true, contentId: null, disciplina: "", minutosManuais: null, origem: "planilha" }));
+        s.materiais.forEach(m => {
+          const isLocal = !/^https?:/.test(m.url);
+          const nome = m.coluna === "Caderno de apoio da semana" ? "Caderno de apoio · " + s.nome : m.coluna === "Apoio" ? "Apoio do dia " + fmtD(m.data) + (m.texto && m.texto !== m.url ? " (" + m.texto + ")" : "") : isLocal ? decodeURIComponent(m.url.split("/").pop() || "Arquivo local") : m.texto;
+          const tipo = isLocal ? "Arquivo no computador" : /docs\.google\.com\/document/.test(m.url) ? "Google Docs" : /spreadsheets/.test(m.url) ? "Google Sheets" : "Site";
+          docs.push({ id: uid("mt"), kind: "material", contentId: null, weekId: w.id, data: m.data, nome, url: m.url, tipo, arquivo: false, origem: "planilha" });
+        });
+      });
+      P.links.forEach(l => docs.push({ id: uid("mt"), kind: "material", contentId: null, weekId: null, geral: true, nome: l.nome, url: l.url, tipo: "Site", arquivo: false, origem: "planilha" }));
+      }
+      const docs = planDocs;
+      let n = 0;
+      for (let i = 0; i < docs.length; i += 8) {
+        await Promise.all(docs.slice(i, i + 8).map(put));
+        n = Math.min(docs.length, i + 8); b.textContent = `Importando… ${Math.round(n / docs.length * 100)}%`;
+      }
+      const P2 = { titulo: P.titulo, periodo: P.periodo, carga: P.carga, distribuicao: P.distribuicao, observacao: P.observacao };
+      await put(Object.assign({}, get("settings") || {}, { id: "settings", kind: "settings", metaDiaria: 480, almocoMin: 60, almocoPadrao: true, intervalos: settings().intervalos, plano: P2, planoImportado: new Date().toISOString() }));
+      selWeek = null; closeDrawer(); toast(`Planilha importada: ${P.semanas.length} semanas e ${planCount()} assuntos`); go("semanas");
+    } catch (e) { b.disabled = false; $("#plC").disabled = false; b.textContent = "Tentar de novo"; toast("A importação parou no meio. Toque em Tentar de novo; registros já salvos não serão perdidos."); }
+  };
+}
+
+/* ================= exemplo ================= */
+async function seedExample() {
+  const t = TODAY(); const mon = addDays(t, -((new Date(t + "T12:00").getDay() + 6) % 7) - 14);
+  const plan = [
+    ["Língua Portuguesa", ["Ortografia e acentuação", "Classes de palavras", "Concordância verbal e nominal", "Regência e crase"]],
+    ["Direito Constitucional", ["Princípios fundamentais", "Direitos e garantias fundamentais", "Organização do Estado"]],
+    ["Raciocínio Lógico", ["Proposições e conectivos", "Equivalências lógicas"]],
+    ["Direito Administrativo", ["Princípios da Administração", "Atos administrativos", "Licitações"]],
+  ];
+  const docs = []; const E = { exemplo: true };
+  const W = [0, 1, 2].map(i => ({ id: uid("wk"), kind: "week", nome: "Semana " + (i + 1), ordem: i + 1, inicio: addDays(mon, i * 7), fim: addDays(mon, i * 7 + 6), metaHoras: 25, ...E }));
+  docs.push(...W);
+  const st = [[1, 1, 1, 1, 1, 1], [1, 1, 1, .5, 0, 0], [.5, 0, 0, 0, 0]];
+  let k = 0;
+  const flat = plan.flatMap(([d, as]) => as.map(a => [d, a]));
+  const per = [flat.slice(0, 4), flat.slice(4, 8), flat.slice(8, 12)];
+  const cs = [];
+  per.forEach((arr, wi) => arr.forEach(([d, a], j) => {
+    const s = st[wi][j] ?? 0; const status = s === 1 ? "concluido" : s ? "andamento" : "pendente";
+    const qr = s ? [20, 30, 15, 25, 18, 22][(k++) % 6] : null;
+    const qc = qr ? Math.round(qr * [0.85, 0.6, 0.75, 0.9, 0.55, 0.8][k % 6]) : null;
+    const c = { id: uid("ct"), kind: "content", weekId: W[wi].id, ordem: j + 1, disciplina: d, assunto: a, status, prevista: addDays(W[wi].inicio, j), concluidaEm: status === "concluido" ? addDays(W[wi].inicio, j + 1) : "", qResolvidas: qr, qCorretas: qc, revisar: qc && qc / qr < .7, obs: "", ...E };
+    cs.push(c); docs.push(c);
+  }));
+  W.forEach((w, wi) => [0, 1, 2, 3, 4].forEach(dd => { const day = addDays(w.inicio, dd); if (day > t) return; const c = cs.filter(x => x.weekId === w.id)[dd % 4]; docs.push({ id: uid("ss"), kind: "session", data: day, inicio: "08:00", fim: wi === 2 ? "12:00" : "13:30", pausasMin: 15, almoco: false, contentId: c.id, disciplina: c.disciplina, ...E }); }));
+  const er = (c, cat, st2, exp) => ({ id: uid("er"), kind: "error", contentId: c.id, disciplina: c.disciplina, assunto: c.assunto, data: c.prevista, questao: "Questão de exemplo", categoria: cat, status: st2, explicacao: exp, ...E });
+  docs.push(er(cs[1], "Confusão entre conceitos", "pendente", "Exemplo: advérbio modifica verbo, adjetivo ou outro advérbio; adjetivo modifica substantivo."));
+  docs.push(er(cs[1], "Desatenção", "revisao", "Exemplo: o enunciado pedia a alternativa incorreta."));
+  docs.push(er(cs[5], "Dúvida sobre legislação", "corrigido", "Exemplo: conferir o artigo exato na Constituição."));
+  docs.push({ id: uid("rv"), kind: "review", assunto: cs[1].assunto, disciplina: cs[1].disciplina, prevista: t, motivo: "Erro: confusão entre conceitos", origem: "erro", status: "pendente", ...E });
+  docs.push({ id: uid("rv"), kind: "review", assunto: cs[0].assunto, disciplina: cs[0].disciplina, prevista: addDays(t, -2), motivo: "Conteúdo concluído", origem: "conteudo", status: "pendente", ...E });
+  docs.push({ id: uid("rv"), kind: "review", assunto: cs[4].assunto, disciplina: cs[4].disciplina, prevista: addDays(t, 5), motivo: "Revisão de 7 dias", origem: "conteudo", status: "pendente", ...E });
+  docs.push({ id: uid("mt"), kind: "material", contentId: cs[0].id, nome: "Resumo de acentuação (exemplo)", url: "https://docs.google.com/document/d/exemplo", tipo: "Google Docs", arquivo: false, ...E });
+  docs.push({ id: "cl_" + W[0].id, kind: "closing", weekId: W[0].id, dificuldades: "Exemplo: classes de palavras exigiram mais tempo do que o previsto.", reforcar: "Classes de palavras", observacoes: "", prioridades: "Exemplo: resolver 30 questões de Constitucional.", finalizadaEm: addDays(W[0].fim, 0) + "T20:00:00.000Z", ...E });
+  for (const d of docs) await put(d);
+  toast("Exemplo carregado"); render();
+}
+async function clearExample() {
+  if (!(await confirmBox("Apagar os dados de exemplo?", "Somente os registros marcados como exemplo serão apagados. O que você cadastrou continua.", "Apagar exemplos"))) return;
+  for (const d of [...S.docs.values()].filter(x => x.exemplo)) await del(d.id);
+  selWeek = null; toast("Exemplos apagados"); render();
+}
+
+/* ================= check animado ================= */
+async function toggleContent(btn) {
+  const c = get(btn.dataset.id); if (!c) return;
+  const done = c.status !== "concluido";
+  const row = btn.closest(".citem");
+  btn.classList.remove("no-anim");
+  animLock = true;
+  if (done) { btn.classList.add("on", "pop"); row && row.classList.add("done"); }
+  else { btn.classList.remove("on", "pop"); row && row.classList.remove("done"); }
+  btn.setAttribute("aria-pressed", done);
+  const rec = Object.assign({}, c, { status: done ? "concluido" : (c.status === "concluido" ? "andamento" : c.status), concluidaEm: done ? TODAY() : "" });
+  const p = put(rec);
+  // atualiza barras e topo imediatamente
+  const o = overall(); $("#ovBar").style.width = o.pct + "%"; $("#ovTxt").textContent = `${Math.round(o.pct)}% do plano · ${o.done}/${o.total}`;
+  setTimeout(() => { animLock = false; if (pendingSnap) { const s = pendingSnap; pendingSnap = null; applySnap(s); } else render(); }, 750);
+  try { await p; if (done) toast("Concluído · " + (c.assunto || "")); } catch (e) { }
+}
+
+/* ================= eventos da view ================= */
+function bindView() {
+  const on = (sel, ev, fn) => { const el = $(sel); if (el) el.addEventListener(ev, fn); };
+  on("#cfDisc", "change", e => { cf.disc = e.target.value; render(); });
+  on("#cfStatus", "change", e => { cf.status = e.target.value; render(); });
+  on("#cfQ", "change", e => { cf.q = e.target.value; render(); });
+  on("#efDisc", "change", e => { ef.disc = e.target.value; render(); });
+  on("#efStatus", "change", e => { ef.status = e.target.value; render(); });
+  on("#efQ", "change", e => { ef.q = e.target.value; render(); });
+  on("#efDe", "change", e => { ef.de = e.target.value; render(); });
+  on("#efAte", "change", e => { ef.ate = e.target.value; render(); });
+  on("#pfWeek", "change", e => { pf.week = e.target.value; render(); });
+  on("#pfDisc", "change", e => { pf.disc = e.target.value; render(); });
+  on("#pfQ", "change", e => { pf.q = e.target.value; render(); });
+  on("#lfDisc", "change", e => { lf.disc = e.target.value; render(); });
+  on("#lfWeek", "change", e => { lf.week = e.target.value; render(); });
+  on("#lfQ", "change", e => { lf.q = e.target.value; render(); });
+  on("#hDay", "change", e => { hDay = e.target.value || TODAY(); render(); });
+}
+document.addEventListener("click", async e => {
+  const a = e.target.closest("[data-act]"); if (!a) return;
+  const id = a.dataset.id, act = a.dataset.act;
+  switch (act) {
+    case "toggle": e.preventDefault(); toggleContent(a); break;
+    case "open-content": contentForm(get(id)); break;
+    case "new-content": contentForm({}, { week: a.dataset.week }); break;
+    case "new-week": weekForm(); break;
+    case "edit-week": weekForm(get(id)); break;
+    case "sel-week": selWeek = id; render(); break;
+    case "new-error": errorForm({}, { contentId: a.dataset.content }); break;
+    case "edit-error": errorForm(get(id)); break;
+    case "new-review": { const c = get(a.dataset.content); reviewForm(c ? { contentId: c.id, assunto: c.assunto, disciplina: c.disciplina, motivo: "Conteúdo concluído" } : {}); break; }
+    case "sug-review": reviewForm({ assunto: a.dataset.a, disciplina: a.dataset.d, motivo: "Sugestão de reforço" }); break;
+    case "done-review": reviewDone(get(id)); break;
+    case "new-session": sessionForm({}, { contentId: a.dataset.content }); break;
+    case "edit-session": sessionForm(get(id)); break;
+    case "save-closing": saveClosing(id, false); break;
+    case "finish-week": saveClosing(id, true); break;
+    case "week-summary": showWeekSummary(id); break;
+    case "import": importFlow(); break;
+    case "import-plan": planFlow(); break;
+    case "wgroup": wGroup = a.dataset.g; render(); break;
+    case "seed": seedExample(); break;
+    case "clear-example": clearExample(); break;
+    case "del-mat": {
+      const m = get(id); if (!m) break;
+      if (await confirmBox("Remover este material?", m.arquivo ? "O arquivo será apagado do armazenamento." : "O link deixa de aparecer neste conteúdo.", "Remover")) {
+        if (m.arquivo && m.assetId && S.assets) { try { await S.assets.delete(m.assetId); } catch (er) { } }
+        await del(id); toast("Material removido"); const c = get(m.contentId); if (c) contentForm(c); else render();
+      } break;
+    }
+    case "dl-mat": {
+      const m = get(id); if (!m) break;
+      if (!S.downloads) { toast("Use “Abrir material” e salve pelo navegador"); break; }
+      try { const b = await (await fetch(m.url)).blob(); await S.downloads.save({ filename: m.nome || "material", data: b }); }
+      catch (er) { if (!er || er.code !== "declined") toast("Não consegui baixar. Use “Abrir material”."); }
+      break;
+    }
+    case "rev-config": case "hours-config": {
+      const s = settings();
+      openDrawer("Preferências", `<form class="form" id="setForm">
+        ${fld("Intervalos de revisão (dias)", `<input name="intervalos" id="st-i" value="${esc(s.intervalos)}">`, "full", "Separe por vírgula. Ex.: 1, 7, 15, 30")}
+        ${fld("Meta diária (horas)", `<input type="number" step="0.5" min="0" name="metaH" id="st-m" value="${(s.metaDiaria || 0) / 60}">`)}
+        ${fld("Desconto do almoço (min)", `<input type="number" min="0" name="almocoMin" id="st-a" value="${s.almocoMin}">`)}
+        <label class="fld full toggle"><input type="checkbox" name="almocoPadrao" id="st-ap" ${s.almocoPadrao ? "checked" : ""}><span>Novos blocos já vêm com o desconto do almoço marcado</span></label>
+      </form>`, `<button class="btn ghost" id="stC">Cancelar</button><button class="btn primary" id="stS">Salvar</button>`);
+      $("#stC").onclick = closeDrawer;
+      $("#stS").onclick = async () => { const f = form($("#setForm")); await put(Object.assign({}, get("settings") || {}, { id: "settings", kind: "settings", intervalos: f.intervalos || "1, 7, 15, 30", metaDiaria: Math.round((+f.metaH || 0) * 60), almocoMin: +f.almocoMin || 0, almocoPadrao: f.almocoPadrao })); closeDrawer(); toast("Preferências salvas"); render(); };
+      break;
+    }
+  }
+});
+
+render();
+boot();
+</script>
+
+</body></html>
